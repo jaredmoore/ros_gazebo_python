@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package>
+  <name>adding_service</name>
+  <version>0.0.0</version>
+  <description>This package provides a Python node within the ROS system that 
+  communicates with an outside client to add two provided numbers.  Multiple 
+  instances of this package can be launched at once to provide a set of adding 
+  services.  This is meant to test using multiple ROS instances at once on the same
+  system.</description>
+
+  <maintainer email="swiftfoottim@gmail.com">Jared Moore</maintainer>
+
+  <license>GPLv3</license>
+  
+  <!-- <url type="website">http://wiki.ros.org/adding_service</url> -->
+
+  <author email="swiftfoottim@gmail.com">Jared Moore</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

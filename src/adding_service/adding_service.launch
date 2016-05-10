@@ -1,0 +1,15 @@
+<launch>
+
+<group ns="adder0">
+<node name="adder_client" pkg="adding_service" type="adder_client.py" output="screen"></node>
+</group>
+
+<group ns="adder1">
+<node name="adder_client" pkg="adding_service" type="adder_client.py" output="screen"></node>
+</group>
+
+<group ns="adder2">
+<node name="adder_client" pkg="adding_service" type="adder_client.py" output="screen"></node>
+</group>
+
+</launch>
