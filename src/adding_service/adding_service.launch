@@ -1,15 +1,18 @@
 <launch>
 
 <group ns="adder0">
-<node name="adder_client" pkg="adding_service" type="adder_client.py" output="screen"></node>
+<node name="adder_transporter" pkg="adding_service" type="adder_transporter.py" output="screen"></node>
+<node name="adder_worker" pkg="adding_service" type="adder.py" output="screen"></node>
 </group>
 
 <group ns="adder1">
-<node name="adder_client" pkg="adding_service" type="adder_client.py" output="screen"></node>
+<node name="adder_transporter" pkg="adding_service" type="adder_transporter.py" output="screen"></node>
+<node name="adder_worker" pkg="adding_service" type="adder.py" output="screen"></node>
 </group>
 
 <group ns="adder2">
-<node name="adder_client" pkg="adding_service" type="adder_client.py" output="screen"></node>
+<node name="adder_transporter" pkg="adding_service" type="adder_transporter.py" output="screen"></node>
+<node name="adder_worker" pkg="adding_service" type="adder.py" output="screen"></node>
 </group>
 
 </launch>

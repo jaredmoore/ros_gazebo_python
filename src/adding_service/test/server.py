@@ -51,7 +51,8 @@ sendThread.start()
 # Read the responses on the receiver socket.
 i = 10
 while i > 0:
-    print(json.loads(receiver.recv()))
+    data = json.loads(receiver.recv())
+    print(data['sum'],data['a']+data['b'])
     i -= 1
  
 # Wait for the send thread to complete.
