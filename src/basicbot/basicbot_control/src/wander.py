@@ -78,7 +78,7 @@ rospy.init_node('wander')
 
 ls = GetLinkStates()
 
-for i in range(40):
+for i in range(10):
     wander_twist = Twist()
     wander_twist.linear.x = 0.5
 
@@ -88,13 +88,13 @@ for i in range(40):
 
     driving_forward = False
     state_change_time = rospy.Time.now()
-    rate = rospy.Rate(1000)
+    #rate = rospy.Rate(1000)
 
     #print(getWorldProp().sim_time)
-    final_time = rospy.Time.now() + rospy.Duration(8)
+    final_time = rospy.Time.now() + rospy.Duration(4)
     #unpausePhysics()
     ws.stepPhysics(steps=1)
-    #print("Final Time: "+str(final_time)+", Current Time: "+str(rospy.Time.now()))        
+    print("Final Time: "+str(final_time)+", Current Time: "+str(rospy.Time.now()))        
 
     while not rospy.is_shutdown():
         if driving_forward:
@@ -117,4 +117,11 @@ for i in range(40):
     print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
 
     resetWorld()
-    #resetSimulation()
+    resetSimulation()
+
+    # Wait for simulation time to reset.
+    while rospy.Time.now() > final_time:
+        # TODO: This is an infinite loop if it never resets.  May want to treat it better?
+        # Wait countdown perhaps?
+        #print("Final Time: "+str(final_time)+", Current Time: "+str(rospy.Time.now()))        
+        pass
