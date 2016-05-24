@@ -22,6 +22,7 @@ class WorldStep(object):
         """ Step the simulation. """
         self.step()
 
+
 ###########################
 
 class GetLinkStates(object):
@@ -67,9 +68,6 @@ rospy.wait_for_service('/gazebo/unpause_physics')
 getWorldProp = rospy.ServiceProxy('/gazebo/get_world_properties', GetWorldProperties)
 resetWorld = rospy.ServiceProxy('/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-pausePhysics = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
-unpausePhysics = rospy.ServiceProxy('/gazebo/unpause_physics',Empty)
-
 
 ws = WorldStep()
 # Setup the messages we will use to drive the robot.
@@ -87,41 +85,28 @@ for i in range(10):
     turn_twist.angular.z = 0.5
 
     driving_forward = False
-    state_change_time = rospy.Time.now()
-    #rate = rospy.Rate(1000)
+    state_change_time = getWorldProp().sim_time 
 
-    #print(getWorldProp().sim_time)
-    final_time = rospy.Time.now() + rospy.Duration(4)
-    #unpausePhysics()
     ws.stepPhysics(steps=1)
-    print("Final Time: "+str(final_time)+", Current Time: "+str(rospy.Time.now()))        
-
+    current_time = getWorldProp().sim_time 
+    final_time = getWorldProp().sim_time + 10.0
+    print("Final Time: "+str(final_time)+", Current Time: "+str(current_time))
+    ws.stepPhysics(steps=1)
+    
     while not rospy.is_shutdown():
+        ws.stepPhysics(steps=1)
         if driving_forward:
             cmd_vel_pub.publish(turn_twist)
         else:
             cmd_vel_pub.publish(wander_twist)
-        if state_change_time < rospy.Time.now():
-            #print("State Change!")
-            #print(ls.getLinkPose('basicbot::base_link'))
+        if state_change_time < getWorldProp().sim_time:
             driving_forward = not driving_forward
             turn_twist.angular.z = turn_twist.angular.z# * random.choice([-1,1])
-            state_change_time = rospy.Time.now() + rospy.Duration(3)
-        if final_time < rospy.Time.now():
-            #pausePhysics()
-            #print("Final Time: "+str(final_time)+", Current Time: "+str(rospy.Time.now()))        
+            state_change_time = getWorldProp().sim_time + 2.5 
+        if final_time <= getWorldProp().sim_time:
             break
-        ws.stepPhysics(steps=1)
-        #rate.sleep()
-
+    
     print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
 
     resetWorld()
     resetSimulation()
-
-    # Wait for simulation time to reset.
-    while rospy.Time.now() > final_time:
-        # TODO: This is an infinite loop if it never resets.  May want to treat it better?
-        # Wait countdown perhaps?
-        #print("Final Time: "+str(final_time)+", Current Time: "+str(rospy.Time.now()))        
-        pass

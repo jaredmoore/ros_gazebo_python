@@ -2,6 +2,7 @@
 <sdf version="1.4">
   <world name="default">
     <physics type="ode">
+	<max_step_size>0.025</max_step_size>
         <real_time_update_rate>0.0</real_time_update_rate>
     </physics>
 
@@ -18,6 +19,6 @@
         <view_controller>orbit</view_controller>
       </camera>
     </gui>
- 
+    <plugin filename="libgazebo_world_step_update.so" name="gazebo_world_step_update"/> 
   </world>
 </sdf>

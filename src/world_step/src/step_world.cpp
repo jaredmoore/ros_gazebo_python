@@ -14,14 +14,25 @@
 #include <world_step/step_world.h>
 
 gazebo::transport::PublisherPtr pub;
+gazebo::transport::SubscriberPtr sub;
+
+int stepped;
+
+void world_steppedCB(ConstIntPtr &_msg) {
+  stepped = 1;
+}
 
 //bool step(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
 bool step(world_step::step_world::Request& request, world_step::step_world::Response& response) {
   // Publish the step message for the simulation.
   gazebo::msgs::WorldControl msg;
   msg.set_step(1);
-  msg.set_multi_step(10);
   pub->Publish(msg);
+
+  while(!stepped) {
+    sleep(0);
+  }
+  stepped = 0;
 
   response.stepped = true;
   
@@ -40,7 +51,9 @@ int main(int argc, char** argv)
   node->Init();
 
   pub = node->Advertise<gazebo::msgs::WorldControl>("~/world_control");
- 
+  sub = node->Subscribe("~/world_stepped", world_steppedCB); 
+  stepped = 0;
+
   // Advertise the service as ready.
   ros::ServiceServer service = n.advertiseService("step_world", step);
  
