@@ -91,7 +91,7 @@ class GA(object):
         self.ga_communicator = GACommunicator()
 
     def calculate_fitnesses(self):
-        return_data = self.ga_communicator.send_genomes(genomes)
+        return_data = self.ga_communicator.send_genomes(self.genomes)
         max_fit = 0.0
         for rd in return_data:
             self.genomes[rd['id']]['fitness'] = rd['fitness']
@@ -105,7 +105,7 @@ class GA(object):
         child_pop = []
 
         # Perform tournament selection.
-        for i in range(len(genomes)):
+        for i in range(len(self.genomes)):
             tourn = random.sample(self.genomes,2)
 
             if tourn[0]['fitness'] > tourn[1]['fitness']:
