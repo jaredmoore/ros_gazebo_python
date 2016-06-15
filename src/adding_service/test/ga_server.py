@@ -15,9 +15,9 @@ class SenderThread(threading.Thread):
         self.data = genomes
  
     def run(self):
-        print("\t\t\t\tStarting "+str(self.threadID))
+        #print("\t\t\t\tStarting "+str(self.threadID))
         self.send_data()
-        print("\t\t\t\tExiting "+str(self.threadID))
+        #print("\t\t\t\tExiting "+str(self.threadID))
  
     def send_data(self):
         """ Send data to worker processes. 
@@ -125,7 +125,7 @@ ga = GA()
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
 
-for i in range(10):
+for i in range(100):
     ga.calculate_fitnesses()
     ga.next_generation()
 
