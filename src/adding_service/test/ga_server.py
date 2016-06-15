@@ -29,7 +29,7 @@ class SenderThread(threading.Thread):
         for i in self.data:
             msg = json.dumps(i)
             print(msg)
-            socket.send(msg)
+            self.socket.send(msg)
  
 class GACommunicator(object):
     """ Class to handle setting up the sockets and sending/receiving genome data. """
