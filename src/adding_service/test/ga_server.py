@@ -116,7 +116,7 @@ class GA(object):
                 child_pop.append(tourn[1].copy())
 
         # Mutate one gene in the child genomes.
-        for i in child_pop[1,len(child_pop)]:
+        for i in child_pop[1:len(child_pop)]:
             i['genome'][random.randint(0,len(i)-1)] = random.random()
 
         self.genomes = child_pop
