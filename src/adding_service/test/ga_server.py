@@ -91,7 +91,7 @@ class GA(object):
         self.ga_communicator = GACommunicator()
 
     def calculate_fitnesses(self):
-        return_data = ga_communicator.send_genomes(genomes))
+        return_data = self.ga_communicator.send_genomes(genomes)
         max_fit = 0.0
         for rd in return_data:
             self.genomes[rd['id']]['fitness'] = rd['fitness']
