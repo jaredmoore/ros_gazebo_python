@@ -117,7 +117,7 @@ class GA(object):
         for i in child_pop:
             i[random.randint(0,len(i)-1)] = random.random()
 
-        self.genomes = child_pop.copy()
+        self.genomes = child_pop
 
 # Initialize and execute the program.
 ga = GA()
