@@ -85,15 +85,16 @@ class GACommunicator(object):
 
 ga_communicator = GACommunicator()
 
-genomes = [{'a':random.random(),'b':random.random()*10.0} for i in range(10)]
-
-print(ga_communicator.send_genomes(genomes))
+for i in range(5):
+    print("Sending tasks to workers")
+    genomes = [{'a':random.random(),'b':random.random()*10.0} for i in range(10)]
+    print(ga_communicator.send_genomes(genomes))
+    print("\n\n\n\n")
  
 # TODO: Auto-detect when workers are ready?
 # TODO: Change messages so they persist waiting for workers?
 #print("Press Enter when the workers are ready: ")
 #_ = raw_input()
-print("Sending tasks to workers")
 
 
 
