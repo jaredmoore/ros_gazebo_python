@@ -28,7 +28,7 @@ class SenderThread(threading.Thread):
         """
         for i in self.data:
             msg = json.dumps(i)
-            print(msg)
+            #print(msg)
             self.socket.send(msg)
  
 class GACommunicator(object):
@@ -87,6 +87,9 @@ ga_communicator = GACommunicator()
 
 # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
 genomes = [{'id':i,'genome':[random.random() for j in range(20)]} for i in range(10)]
+
+for g in genomes:
+    print(g['id'], sum(g['genome']))
 
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
