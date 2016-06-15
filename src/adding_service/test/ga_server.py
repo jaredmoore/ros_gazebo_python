@@ -50,8 +50,8 @@ class GACommunicator(object):
     def __del__(self):
         """ Close the sockets. """
         print("Closing Socket")
-        socket.close()
-        receiver.close()
+        self.socket.close()
+        self.receiver.close()
 
     def send_genomes(self,genomes):
         """ Send the genomes through the sender thread to workers. 
@@ -86,6 +86,8 @@ class GACommunicator(object):
 ga_communicator = GACommunicator()
 
 genomes = [{'a':random.random(),'b':random.random()*10.0} for i in range(10)]
+
+print(ga_communicator.send_genomes(genomes))
  
 # TODO: Auto-detect when workers are ready?
 # TODO: Change messages so they persist waiting for workers?
