@@ -87,7 +87,7 @@ class GA(object):
 
     def __init__(self):
         # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
-        self.genomes = [{'id':i,'genome':[random.random() for j in range(20)], 'fitness':-1.0} for i in range(100)]
+        self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(20)], 'fitness':-1.0} for i in range(100)]
         self.elite_ind = -1
         self.ga_communicator = GACommunicator()
 
