@@ -32,7 +32,7 @@ while True:
     data = json.loads(receiver.recv())
 
     # Load the data into a parameter in ROS
-    rospy.set_param('adding_data', data)
+    rospy.set_param('adding_data', data['genome'])
 
     # Send a ready message on the topic to the adder node
     pub.publish(std_msgs.msg.Empty())
@@ -43,7 +43,7 @@ while True:
 
     # Transmit the result back to the external source
 
-    msg = json.dumps({'a':data['a'],'b':data['b'],'sum':addition_result, 'ns':rospy.get_namespace(), 'name':rospy.get_name()})
+    msg = json.dumps({'id':data['id'],'fitness':addition_result, 'ns':rospy.get_namespace(), 'name':rospy.get_name()})
     sender.send(msg)
-    print (rospy.get_namespace(), data['a']+data['b'], addition_result)
+    print (rospy.get_namespace(), addition_result)
     addition_result = ''

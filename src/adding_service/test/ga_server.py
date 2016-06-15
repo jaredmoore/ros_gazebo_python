@@ -85,8 +85,8 @@ class GACommunicator(object):
 
 ga_communicator = GACommunicator()
 
-# Initialize the genomes with a randomly generated list of 20 floats under 1.0
-genomes = [[random.random() for j in range(20)] for i in range(10)]
+# Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
+genomes = [{'id':i,'genome':[random.random() for j in range(20)]} for i in range(10)]
 
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
