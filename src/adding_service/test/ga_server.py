@@ -104,7 +104,7 @@ class GA(object):
 
     def next_generation(self):
         """ Modify the population for the next generation. """
-        child_pop = [self.elite_ind]
+        child_pop = [self.elite_ind.copy()]
 
         # Perform tournament selection.
         for i in range(len(self.genomes)-1):
