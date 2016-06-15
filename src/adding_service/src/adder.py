@@ -7,7 +7,7 @@ def addCallback(data):
     """ Add the two numbers provided in the ROS Param 'adding_data' """
     add_data = rospy.get_param('adding_data')
 
-    pub.publish(add_data['a']+add_data['b'])
+    pub.publish(sum(add_data))
 
 rospy.init_node('adder',anonymous=True)
 sub = rospy.Subscriber('adding_start', std_msgs.msg.Empty, addCallback)
