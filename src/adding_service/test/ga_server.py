@@ -91,8 +91,8 @@ print(ga_communicator.send_genomes(genomes))
  
 # TODO: Auto-detect when workers are ready?
 # TODO: Change messages so they persist waiting for workers?
-print("Press Enter when the workers are ready: ")
-_ = raw_input()
+#print("Press Enter when the workers are ready: ")
+#_ = raw_input()
 print("Sending tasks to workers")
 
 
