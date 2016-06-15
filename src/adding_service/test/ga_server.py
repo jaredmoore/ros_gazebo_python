@@ -83,21 +83,52 @@ class GACommunicator(object):
 
         return return_data
 
-ga_communicator = GACommunicator()
+class GA(object):
 
-# Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
-genomes = [{'id':i,'genome':[random.random() for j in range(20)]} for i in range(10)]
+    def __init__(self):
+        # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
+        self.genomes = [{'id':i,'genome':[random.random() for j in range(20)]} for i in range(10),'fitness':-1.0]
+        self.ga_communicator = GACommunicator()
 
-for g in genomes:
-    print(g['id'], sum(g['genome']))
+    def calculate_fitnesses(self):
+        return_data = ga_communicator.send_genomes(genomes))
+        max_fit = 0.0
+        for rd in return_data:
+            self.genomes[rd['id']]['fitness'] = rd['fitness']
+            if rd['fitness'] > max_fit:
+                max_fit = rd['fitness']
+        
+        print(max_fit)
+
+    def next_generation(self):
+        """ Modify the population for the next generation. """
+        child_pop = []
+
+        # Perform tournament selection.
+        for i in range(len(genomes)):
+            tourn = random.sample(self.genomes,2)
+
+            if tourn[0]['fitness'] > tourn[1]['fitness']:
+                child_pop.append(tourn[0].copy())
+            else:
+                child_pop.append(tourn[1].copy())
+
+        # Mutate one gene in the child genomes.
+        for i in child_pop:
+            i[random.randint(0,len(i)-1)] = random.random()
+
+        self.genomes = child_pop
+
+# Initialize and execute the program.
+ga = GA()
 
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
 
 for i in range(5):
-    print("Sending tasks to workers")
-    print(ga_communicator.send_genomes(genomes))
-    print("\n\n\n\n")
+    ga.calculate_fitnesses()
+    ga.next_generation()
+
  
 # TODO: Auto-detect when workers are ready?
 # TODO: Change messages so they persist waiting for workers?
