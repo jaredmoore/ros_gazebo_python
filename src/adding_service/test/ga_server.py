@@ -88,6 +88,7 @@ class GA(object):
     def __init__(self):
         # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
         self.genomes = [{'id':i,'genome':[random.random() for j in range(20)], 'fitness':-1.0} for i in range(100)]
+        self.elite_ind = -1
         self.ga_communicator = GACommunicator()
 
     def calculate_fitnesses(self):
@@ -97,15 +98,16 @@ class GA(object):
             self.genomes[rd['id']]['fitness'] = rd['fitness']
             if rd['fitness'] > max_fit:
                 max_fit = rd['fitness']
+                self.elite_ind = rd.copy()
         
         print(max_fit)
 
     def next_generation(self):
         """ Modify the population for the next generation. """
-        child_pop = []
+        child_pop = [self.elite_ind]
 
         # Perform tournament selection.
-        for i in range(len(self.genomes)):
+        for i in range(len(self.genomes)-1):
             tourn = random.sample(self.genomes,2)
 
             if tourn[0]['fitness'] > tourn[1]['fitness']:
