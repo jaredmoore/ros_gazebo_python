@@ -74,8 +74,8 @@ class GACommunicator(object):
         i = len(genomes)
         while i > 0:
             data = json.loads(self.receiver.recv())
-            #return_data.append({'id':data['id'], 'fitness':data['fitness']})
-            return_data.append({'sum':data['sum'],'true_sum':data['a']+data['b']})
+            return_data.append({'id':data['id'], 'fitness':data['fitness']})
+            #return_data.append({'sum':data['sum'],'true_sum':data['a']+data['b']})
             i -= 1
          
         # Wait for the send thread to complete.
