@@ -117,7 +117,7 @@ class GA(object):
         for i in child_pop:
             i[random.randint(0,len(i)-1)] = random.random()
 
-        self.genomes = child_pop
+        self.genomes = child_pop.copy()
 
 # Initialize and execute the program.
 ga = GA()
@@ -125,7 +125,7 @@ ga = GA()
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
 
-for i in range(5):
+for i in range(10):
     ga.calculate_fitnesses()
     ga.next_generation()
 
