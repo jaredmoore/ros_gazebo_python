@@ -107,12 +107,11 @@ class GA(object):
                 max_fit = rd['fitness']
                 self.elite_ind = copy.deepcopy(self.genomes[self.id_map[rd['id']]])
         
-        print(max_fit, self.elite_ind['fitness'],self.elite_ind['genome'])
+        print(max_fit)
 
     def next_generation(self):
         """ Modify the population for the next generation. """
         child_pop = [copy.deepcopy(self.elite_ind)]
-        print(child_pop[0]['id'],child_pop[0]['genome'])
 
         # Perform tournament selection.
         for i in range(len(self.genomes)-1):
@@ -131,8 +130,6 @@ class GA(object):
 
         self.genomes = child_pop
         self.id_map = {k:v for k,v in zip([x['id'] for x in self.genomes],[i for i in range(self.pop_size)])}
-        for i in self.genomes:
-            print("\t\t"+str(i['id'])+":"+str(i['genome']))
 
 # Initialize and execute the program.
 ga = GA()
