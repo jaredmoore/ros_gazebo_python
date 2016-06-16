@@ -5,6 +5,7 @@ import json
 import zmq
  
 import random
+import rospy
  
 import threading
  
@@ -136,6 +137,7 @@ ga = GA()
 
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
+rospy.wait_for_service("/adder/adder_transporter/get_loggers")
 
 for i in range(100):
     ga.calculate_fitnesses()
