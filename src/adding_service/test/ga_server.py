@@ -101,7 +101,7 @@ class GA(object):
                 max_fit = rd['fitness']
                 self.elite_ind = copy.deepcopy(self.genomes[rd['id']])
         
-        print(max_fit)
+        print(max_fit, self.elite_ind['fitness'],self.elite_ind['genome'])
 
     def next_generation(self):
         """ Modify the population for the next generation. """
