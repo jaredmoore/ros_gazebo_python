@@ -104,7 +104,7 @@ class GA(object):
 
     def next_generation(self):
         """ Modify the population for the next generation. """
-        child_pop = [self.elite_ind.copy()]
+        child_pop = [self.elite_ind.deepcopy()]
         print(child_pop[0]['id'],child_pop[0]['genome'])
 
         # Perform tournament selection.
@@ -112,9 +112,9 @@ class GA(object):
             tourn = random.sample(self.genomes,2)
 
             if tourn[0]['fitness'] > tourn[1]['fitness']:
-                child_pop.append(tourn[0].copy())
+                child_pop.append(tourn[0].deepcopy())
             else:
-                child_pop.append(tourn[1].copy())
+                child_pop.append(tourn[1].deepcopy())
 
         # Mutate one gene in the child genomes.
         for i in child_pop[1:len(child_pop)]:
