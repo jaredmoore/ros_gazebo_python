@@ -105,7 +105,7 @@ class GA(object):
     def next_generation(self):
         """ Modify the population for the next generation. """
         child_pop = [self.elite_ind.copy()]
-        print(child_pop[0])
+        print(child_pop[0]['id'],child_pop[0]['genome'])
 
         # Perform tournament selection.
         for i in range(len(self.genomes)-1):
@@ -122,7 +122,7 @@ class GA(object):
 
         self.genomes = child_pop
         for i in self.genomes:
-            print("\t",i)
+            print("\t\t"+str(i['id'])+":"+str(i['genome']))
 
 # Initialize and execute the program.
 ga = GA()
