@@ -105,7 +105,7 @@ class GA(object):
             self.genomes[self.id_map[rd['id']]]['fitness'] = rd['fitness']
             if rd['fitness'] > max_fit:
                 max_fit = rd['fitness']
-                self.elite_ind = copy.deepcopy(self.genomes[rd['id']])
+                self.elite_ind = copy.deepcopy(self.genomes[self.id_map[rd['id']]])
         
         print(max_fit, self.elite_ind['fitness'],self.elite_ind['genome'])
 
