@@ -87,7 +87,7 @@ class GA(object):
 
     def __init__(self):
         # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
-        self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(20)], 'fitness':-1.0} for i in range(4)]
+        self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(2)], 'fitness':-1.0} for i in range(4)]
         self.elite_ind = -1
         self.ga_communicator = GACommunicator()
 
@@ -118,7 +118,7 @@ class GA(object):
 
         # Mutate one gene in the child genomes.
         for i in child_pop[1:len(child_pop)]:
-            i['genome'][random.randint(0,len(i)-1)] = random.random()
+            i['genome'][random.randint(0,len(i['genome'])-1)] = random.random()
 
         self.genomes = child_pop
         for i in self.genomes:
