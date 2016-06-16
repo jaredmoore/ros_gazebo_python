@@ -95,7 +95,6 @@ class GA(object):
         return_data = self.ga_communicator.send_genomes(self.genomes)
         max_fit = 0.0
         for rd in return_data:
-            print(rd)
             self.genomes[rd['id']]['fitness'] = rd['fitness']
             if rd['fitness'] > max_fit:
                 max_fit = rd['fitness']
@@ -121,7 +120,6 @@ class GA(object):
             i['genome'][random.randint(0,len(i)-1)] = random.random()
 
         self.genomes = child_pop
-        print(self.genomes)
 
 # Initialize and execute the program.
 ga = GA()
