@@ -87,10 +87,15 @@ class GACommunicator(object):
 class GA(object):
 
     def __init__(self):
-        # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0
-        self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(2)], 'fitness':-1.0} for i in range(4)]
+        # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0\
+        self.num_genes = 2
+        self.pop_size = 4
+
+        self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(self.num_genes)], 'fitness':-1.0} for i in range(self.pop_size)]
         self.elite_ind = -1
         self.ga_communicator = GACommunicator()
+
+        self.child_id = self.pop_size
 
     def calculate_fitnesses(self):
         return_data = self.ga_communicator.send_genomes(self.genomes)
@@ -116,6 +121,8 @@ class GA(object):
                 child_pop.append(copy.deepcopy(tourn[0]))
             else:
                 child_pop.append(copy.deepcopy(tourn[1]))
+            child_pop[-1]['id'] = self.child_id
+            self.child_id += 1
 
         # Mutate one gene in the child genomes.
         for i in child_pop[1:len(child_pop)]:
