@@ -92,6 +92,7 @@ class GA(object):
         self.pop_size = 4
 
         self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(self.num_genes)], 'fitness':-1.0} for i in range(self.pop_size)]
+        self.id_map = {k:v for k,v in zip([x['id'] for x in self.genomes],[i for i in range(self.pop_size)])}
         self.elite_ind = -1
         self.ga_communicator = GACommunicator()
 
@@ -101,7 +102,7 @@ class GA(object):
         return_data = self.ga_communicator.send_genomes(self.genomes)
         max_fit = 0.0
         for rd in return_data:
-            self.genomes[rd['id']]['fitness'] = rd['fitness']
+            self.genomes[self.id_map[rd['id']]]['fitness'] = rd['fitness']
             if rd['fitness'] > max_fit:
                 max_fit = rd['fitness']
                 self.elite_ind = copy.deepcopy(self.genomes[rd['id']])
@@ -129,6 +130,7 @@ class GA(object):
             i['genome'][random.randint(0,len(i['genome'])-1)] = random.random()
 
         self.genomes = child_pop
+        self.id_map = {k:v for k,v in zip([x['id'] for x in self.genomes],[i for i in range(self.pop_size)])}
         for i in self.genomes:
             print("\t\t"+str(i['id'])+":"+str(i['genome']))
 
