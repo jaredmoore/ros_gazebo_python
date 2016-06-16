@@ -26,7 +26,8 @@ class senderThread(threading.Thread):
                 - Persistant throughout execution for now.
         """
         for i in range(10):
-            msg = json.dumps({'a':random.random(),'b':random.random()*10.0})
+            ind = {'id':i,'genome':[random.random() for j in range(2)], 'fitness':-1.0}
+            msg = json.dumps(ind)
             print(msg)
             socket.send(msg)
  
@@ -52,7 +53,7 @@ sendThread.start()
 i = 10
 while i > 0:
     data = json.loads(receiver.recv())
-    print(data['sum'],data['a']+data['b'])
+    print(data['fitness'],data['id'])
     i -= 1
  
 # Wait for the send thread to complete.
