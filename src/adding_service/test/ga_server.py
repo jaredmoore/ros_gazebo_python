@@ -88,8 +88,8 @@ class GA(object):
 
     def __init__(self):
         # Initialize the genomes with an id and randomly generated list of 20 floats under 1.0\
-        self.num_genes = 2
-        self.pop_size = 4
+        self.num_genes = 20
+        self.pop_size = 100
 
         self.genomes = [{'id':i,'genome':[random.random()*0.1 for j in range(self.num_genes)], 'fitness':-1.0} for i in range(self.pop_size)]
         self.id_map = {k:v for k,v in zip([x['id'] for x in self.genomes],[i for i in range(self.pop_size)])}
@@ -137,7 +137,7 @@ ga = GA()
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
 
-for i in range(5):
+for i in range(100):
     ga.calculate_fitnesses()
     ga.next_generation()
 
