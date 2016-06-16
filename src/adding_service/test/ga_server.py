@@ -105,6 +105,7 @@ class GA(object):
     def next_generation(self):
         """ Modify the population for the next generation. """
         child_pop = [self.elite_ind.copy()]
+        print(child_pop[0])
 
         # Perform tournament selection.
         for i in range(len(self.genomes)-1):
@@ -120,6 +121,8 @@ class GA(object):
             i['genome'][random.randint(0,len(i)-1)] = random.random()
 
         self.genomes = child_pop
+        for i in self.genomes:
+            print("\t",i)
 
 # Initialize and execute the program.
 ga = GA()
@@ -127,7 +130,7 @@ ga = GA()
 # TODO: Implement check for workers before sending data.
 # TODO: Change messages so they persist while waiting for workers?
 
-for i in range(100):
+for i in range(5):
     ga.calculate_fitnesses()
     ga.next_generation()
 
