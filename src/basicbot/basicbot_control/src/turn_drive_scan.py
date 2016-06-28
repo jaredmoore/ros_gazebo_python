@@ -81,8 +81,7 @@ class GetLaserScanner(object):
 	def lsCallback(self,msg):
 		""" Callback for the laser_scanner topic. """
 		self.msg = msg
-		for h,r in zip(msg.header, msg.ranges):
-			self.formatted_msg = {'time':str(h.stamp.secs)+"."+str(h.stamp.nsecs), 'ranges':sum(r)}
+		self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'ranges':sum(msg.ranges)}
 
 	def getScanState(self):
 		""" Get the current scan information. """
@@ -125,7 +124,7 @@ state_change_time = getWorldProp().sim_time
 # Start the simulation with an initial step.
 ws.stepPhysics(steps=1)
 current_time = getWorldProp().sim_time 
-final_time = getWorldProp().sim_time + 20.0
+final_time = getWorldProp().sim_time + 10.0
 print("Final Time: "+str(final_time)+", Current Time: "+str(current_time))
 ws.stepPhysics(steps=1)
 
