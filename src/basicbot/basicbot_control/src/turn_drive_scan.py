@@ -81,11 +81,33 @@ class GetLaserScanner(object):
 	def lsCallback(self,msg):
 		""" Callback for the laser_scanner topic. """
 		self.msg = msg
-		self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'ranges':sum(msg.ranges)}
+		self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum(msg.ranges), 'ranges':msg.ranges}
 
 	def getScanState(self):
 		""" Get the current scan information. """
 		return self.formatted_msg
+
+    def getLeftCenterRightScanState(self):
+        """ Divide the vision into three sections and report on their average sum. """
+
+        partitioned_vision = []
+
+        partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
+
+        # Add additional ones to middle if don't match sum.
+        if sum(partitions) < len(self.formatted_msg['ranges']):
+            partitions[1] += len(self.formatted_msg['ranges']) - sum(partitions)
+
+        # Calculate the index offsets.
+        partitions[1] = partitions[0] + partitions[1]
+        partitions[2] = partitions[1] + partitions[2]
+
+        # Get left, center, and right averages.
+        partitioned_vision.append(sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]]))
+        partitioned_vision.append(sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]]))
+        partitioned_vision.append(sum(self.formatted_msg['ranges'][partitions[2]:])/len(self.formatted_msg['ranges'][partitions[2]:]))
+
+        return partitioned_vision
 
 ###########################
 
@@ -130,6 +152,7 @@ ws.stepPhysics(steps=1)
 
 while not rospy.is_shutdown():
     ws.stepPhysics(steps=1)
+    print(scan.getLeftCenterRightScanState())
     if driving_forward:
         cmd_vel_pub.publish(turn_twist)
     else:
@@ -139,7 +162,6 @@ while not rospy.is_shutdown():
         turn_twist.angular.z = turn_twist.angular.z# * random.choice([-1,1])
         state_change_time = getWorldProp().sim_time + 2.5 
         print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
-        print(scan.getScanState())
     if final_time <= getWorldProp().sim_time:
         break
 
