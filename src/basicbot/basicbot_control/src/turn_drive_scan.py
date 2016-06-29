@@ -90,9 +90,12 @@ class GetLaserScanner(object):
     def getLeftCenterRightScanState(self):
         """ Divide the vision into three sections and report on their average sum. """
 
+        # If no message yet return blank
+        if not self.formatted_msg:
+            return []
+
         partitioned_vision = []
 
-        print(self.formatted_msg['ranges'])
         partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
 
         # Add additional ones to middle if don't match sum.
