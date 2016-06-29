@@ -136,7 +136,7 @@ twist['right'].angular.z = 0.5
 
 def MoveRobot(movement):
     """ Movements: 'left', 'forward', 'right', 'stop' """
-    cmd_vel_pub.publish(twist['movement'])
+    cmd_vel_pub.publish(twist[movement])
 
 ###########################
 
