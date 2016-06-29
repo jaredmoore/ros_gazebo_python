@@ -4,6 +4,9 @@
 
     Interacts with the world by reading in a rostopic "laser_scanner" that gives 
     sensor vision to the robot.
+
+    Requires: 
+        smach: sudo apt-get install ros-indigo-executive-smach
 """
 
 import random
@@ -178,18 +181,22 @@ class DriveForward(smach.State):
             return 'within_threshold'
         elif userdata.detect_center < 10.0: 
             return 'drive_forward'
-        elif userdata.detect_right < 10.0 and userdata.detect_center >= 10.0 and userdata.detect_left >= 10.0: 
-            return 'spin_right'
-        else:
+        elif userdata.detect_leftt < 10.0 and userdata.detect_center >= 10.0 and userdata.detect_right >= 10.0: 
             return 'spin_left'
+        else:
+            return 'spin_right'
 
 class Stop(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes='succeeded')
+        smach.State.__init__(self, outcomes=['succeeded','spin_right'],
+            input_keys=['detect_center'])
 
     def execute(self, userdata):
         MoveRobot('stop')
-        return 'succeeded'
+        if userdata.detect_center < 10.0:
+            return 'succeeded'
+        else:
+            return 'spin_right'
 
 ###########################
 
@@ -227,7 +234,7 @@ with sm:
             'spin_left':'SPIN_LEFT',
             'within_threshold':'STOP'
             })
-        smach.StateMachine.add('STOP', Stop(), transitions={ 'succeeded':'succeeded'})
+        smach.StateMachine.add('STOP', Stop(), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT'})
 
         outcome = sm.execute()
 
