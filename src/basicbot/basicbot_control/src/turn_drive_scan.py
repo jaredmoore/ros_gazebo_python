@@ -93,26 +93,24 @@ class GetLaserScanner(object):
     def getLeftCenterRightScanState(self):
         """ Divide the vision into three sections and report on their average sum. """
 
-        # If no message yet return blank
-        if not self.formatted_msg:
-            return []
-
         partitioned_vision = {'right':10.0,'left':10.0,'center':10.0}
 
-        partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
+        # If no message yet return blank
+        if self.formatted_msg:
+            partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
 
-        # Add additional ones to middle if don't match sum.
-        if sum(partitions) < len(self.formatted_msg['ranges']):
-            partitions[1] += len(self.formatted_msg['ranges']) - sum(partitions)
+            # Add additional ones to middle if don't match sum.
+            if sum(partitions) < len(self.formatted_msg['ranges']):
+                partitions[1] += len(self.formatted_msg['ranges']) - sum(partitions)
 
-        # Calculate the index offsets.
-        partitions[1] = partitions[0] + partitions[1]
-        partitions[2] = partitions[1] + partitions[2]
+            # Calculate the index offsets.
+            partitions[1] = partitions[0] + partitions[1]
+            partitions[2] = partitions[1] + partitions[2]
 
-        # Get right, center, and left averages.
-        partitioned_vision['right'] = sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]])
-        partitioned_vision['center'] = sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]])
-        partitioned_vision['left'] = sum(self.formatted_msg['ranges'][partitions[1]:partitions[2]])/len(self.formatted_msg['ranges'][partitions[1]:partitions[2]])
+            # Get right, center, and left averages.
+            partitioned_vision['right'] = sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]])
+            partitioned_vision['center'] = sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]])
+            partitioned_vision['left'] = sum(self.formatted_msg['ranges'][partitions[1]:partitions[2]])/len(self.formatted_msg['ranges'][partitions[1]:partitions[2]])
 
         return partitioned_vision
 
