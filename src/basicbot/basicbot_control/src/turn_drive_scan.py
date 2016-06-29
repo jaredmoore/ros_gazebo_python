@@ -245,31 +245,6 @@ with sm:
 
         outcome = sm.execute()
 
-# Set the initial state of the robot.
-driving_forward = False
-state_change_time = getWorldProp().sim_time 
-
-# Start the simulation with an initial step.
-ws.stepPhysics(steps=1)
 current_time = getWorldProp().sim_time 
-final_time = getWorldProp().sim_time + 10.0
-print("Final Time: "+str(final_time)+", Current Time: "+str(current_time))
-ws.stepPhysics(steps=1)
-
-while not rospy.is_shutdown():
-    ws.stepPhysics(steps=1)
-    print(scan.getLeftCenterRightScanState())
-    # if driving_forward:
-    #     cmd_vel_pub.publish(turn_twist)
-    # else:
-    #     cmd_vel_pub.publish(wander_twist)
-    if state_change_time < getWorldProp().sim_time:
-        # driving_forward = not driving_forward
-        # turn_twist.angular.z = turn_twist.angular.z# * random.choice([-1,1])
-        state_change_time = getWorldProp().sim_time + 2.5 
-        print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
-    if final_time <= getWorldProp().sim_time:
-        break
-
+print("Current Time: "+str(current_time))
 print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
-
