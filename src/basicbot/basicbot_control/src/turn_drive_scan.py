@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """
-	Implements a basic controller that turns and drives towards an object.  
+    Implements a basic controller that turns and drives towards an object.  
 
-	Interacts with the world by reading in a rostopic "laser_scanner" that gives 
-	sensor vision to the robot.
+    Interacts with the world by reading in a rostopic "laser_scanner" that gives 
+    sensor vision to the robot.
 """
 
 import random
@@ -68,24 +68,24 @@ class GetLinkStates(object):
 ###########################
 
 class GetLaserScanner(object):
-	""" Connect to /laser_scanner rostopic and get information about the sensor.
-	Message format is: 
-	"""
+    """ Connect to /laser_scanner rostopic and get information about the sensor.
+    Message format is: 
+    """
 
-	def __init__(self):
-		rospy.Subscriber('/laser_scanner', LaserScan, self.lsCallback)
+    def __init__(self):
+        rospy.Subscriber('/laser_scanner', LaserScan, self.lsCallback)
 
-		self.msg = ""
-		self.formatted_msg = ""
+        self.msg = ""
+        self.formatted_msg = ""
 
-	def lsCallback(self,msg):
-		""" Callback for the laser_scanner topic. """
-		self.msg = msg
-		self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum(msg.ranges), 'ranges':msg.ranges}
+    def lsCallback(self,msg):
+        """ Callback for the laser_scanner topic. """
+        self.msg = msg
+        self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum(msg.ranges), 'ranges':msg.ranges}
 
-	def getScanState(self):
-		""" Get the current scan information. """
-		return self.formatted_msg
+    def getScanState(self):
+        """ Get the current scan information. """
+        return self.formatted_msg
         
     def getLeftCenterRightScanState(self):
         """ Divide the vision into three sections and report on their average sum. """
