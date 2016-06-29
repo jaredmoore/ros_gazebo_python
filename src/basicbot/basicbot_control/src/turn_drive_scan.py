@@ -176,7 +176,7 @@ class DriveForward(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['spin_right','drive_forward','spin_left','within_threshold'],
             input_keys=['detect_center','detect_right','detect_left'])
-        self.threshold = 8.0
+        self.threshold = 5.0
 
     def execute(self, userdata):
         MoveRobot('forward')
