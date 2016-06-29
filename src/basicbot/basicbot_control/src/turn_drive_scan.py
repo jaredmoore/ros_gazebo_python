@@ -97,7 +97,7 @@ class GetLaserScanner(object):
         if not self.formatted_msg:
             return []
 
-        partitioned_vision = {}
+        partitioned_vision = {'right':10.0,'left':10.0,'center':10.0}
 
         partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
 
