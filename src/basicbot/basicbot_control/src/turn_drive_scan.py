@@ -92,6 +92,7 @@ class GetLaserScanner(object):
 
         partitioned_vision = []
 
+        print(self.formatted_msg['ranges'])
         partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
 
         # Add additional ones to middle if don't match sum.
