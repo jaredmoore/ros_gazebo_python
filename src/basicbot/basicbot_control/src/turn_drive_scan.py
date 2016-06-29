@@ -106,12 +106,90 @@ class GetLaserScanner(object):
         partitions[1] = partitions[0] + partitions[1]
         partitions[2] = partitions[1] + partitions[2]
 
-        # Get left, center, and right averages.
+        # Get right, center, and left averages.
         partitioned_vision.append(sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]]))
         partitioned_vision.append(sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]]))
         partitioned_vision.append(sum(self.formatted_msg['ranges'][partitions[1]:partitions[2]])/len(self.formatted_msg['ranges'][partitions[1]:partitions[2]]))
 
         return partitioned_vision
+
+###########################
+
+# Setup the driving messages.
+twist = {}
+twist['forward'] = Twist()
+twist['forward'].linear.x = 0.5
+
+twist['stop'] = Twist()
+twist['stop'].linear.x = 0.0
+
+twist['left'] = Twist()
+twist['left'].linear.x = 0.0
+twist['left'].angular.z = -0.5
+
+twist['right'] = Twist()
+twist['right'].linear.x = 0.0
+twist['right'].angular.z = 0.5
+
+def MoveRobot(movement):
+    """ Movements: 'left', 'forward', 'right', 'stop' """
+    cmd_vel_pub.publish(twist['movement'])
+
+###########################
+
+import smach
+import smach_ros
+
+# Define the states for the robot
+
+class SpinLeft(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['spin_left','drive_forward'],
+            input_keys=['detect_center'])
+
+    def execute(self, userdata):
+        MoveRobot('left')
+        if userdata.detect_center < 10.0:
+            return 'drive_forward'
+        else: 
+            return 'spin_left'
+
+class SpinRight(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['spin_right','drive_forward'],
+            input_keys=['detect_center'])
+
+    def execute(self, userdata):
+        MoveRobot('right')
+        if userdata.detect_center < 10.0:
+            return 'drive_forward'
+        else: 
+            return 'spin_right'
+
+class DriveForward(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['spin_right','drive_forward','spin_left','within_threshold'],
+            input_keys=['detect_center','detect_right','detect_left'])
+        self.threshold = 8.0
+
+    def execute(self, userdata):
+        MoveRobot('forward')
+        if userdata.detect_center < self.threshold:
+            return 'within_threshold'
+        elif userdata.detect_center < 10.0: 
+            return 'drive_forward'
+        elif userdata.detect_right < 10.0 and userdata.detect_center >= 10.0 and userdata.detect_left >= 10.0: 
+            return 'spin_right'
+        else:
+            return 'spin_left'
+
+class Stop(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes='succeeded')
+
+    def execute(self, userdata):
+        MoveRobot('stop')
+        return 'succeeded'
 
 ###########################
 
@@ -135,13 +213,23 @@ rospy.init_node('wander')
 ls = GetLinkStates()
 scan = GetLaserScanner()
 
-# Setup the driving messages.
-wander_twist = Twist()
-wander_twist.linear.x = 0.5
+sm = smach.StateMachine(outcomes=['succeeded'])
 
-turn_twist = Twist()
-turn_twist.linear.x = 0.0
-turn_twist.angular.z = 0.5
+with sm:
+        smach.StateMachine.add('SPIN_RIGHT', SpinRight(), transitions={ 'spin_right':'SPIN_RIGHT',
+            'drive_forward':'DRIVE_FORWARD'
+            })
+        smach.StateMachine.add('SPIN_LEFT', SpinLeft(), transitions={ 'spin_left':'SPIN_LEFT',
+            'drive_forward':'DRIVE_FORWARD'
+            })
+        smach.StateMachine.add('DRIVE_FORWARD', DriveForward(), transitions={ 'spin_right':'SPIN_RIGHT',
+            'drive_forward':'DRIVE_FORWARD',
+            'spin_left':'SPIN_LEFT',
+            'within_threshold':'STOP'
+            })
+        smach.StateMachine.add('STOP', Stop(), transitions={ 'succeeded':'succeeded'})
+
+        outcome = sm.execute()
 
 # Set the initial state of the robot.
 driving_forward = False
@@ -157,13 +245,13 @@ ws.stepPhysics(steps=1)
 while not rospy.is_shutdown():
     ws.stepPhysics(steps=1)
     print(scan.getLeftCenterRightScanState())
-    if driving_forward:
-        cmd_vel_pub.publish(turn_twist)
-    else:
-        cmd_vel_pub.publish(wander_twist)
+    # if driving_forward:
+    #     cmd_vel_pub.publish(turn_twist)
+    # else:
+    #     cmd_vel_pub.publish(wander_twist)
     if state_change_time < getWorldProp().sim_time:
-        driving_forward = not driving_forward
-        turn_twist.angular.z = turn_twist.angular.z# * random.choice([-1,1])
+        # driving_forward = not driving_forward
+        # turn_twist.angular.z = turn_twist.angular.z# * random.choice([-1,1])
         state_change_time = getWorldProp().sim_time + 2.5 
         print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
     if final_time <= getWorldProp().sim_time:
