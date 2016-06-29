@@ -86,7 +86,7 @@ class GetLaserScanner(object):
 	def getScanState(self):
 		""" Get the current scan information. """
 		return self.formatted_msg
-
+        
     def getLeftCenterRightScanState(self):
         """ Divide the vision into three sections and report on their average sum. """
 
