@@ -97,7 +97,7 @@ class GetLaserScanner(object):
         if not self.formatted_msg:
             return []
 
-        partitioned_vision = []
+        partitioned_vision = {}
 
         partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
 
@@ -110,9 +110,9 @@ class GetLaserScanner(object):
         partitions[2] = partitions[1] + partitions[2]
 
         # Get right, center, and left averages.
-        partitioned_vision.append(sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]]))
-        partitioned_vision.append(sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]]))
-        partitioned_vision.append(sum(self.formatted_msg['ranges'][partitions[1]:partitions[2]])/len(self.formatted_msg['ranges'][partitions[1]:partitions[2]]))
+        partitioned_vision['right'] = sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]])
+        partitioned_vision['center'] = sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]])
+        partitioned_vision['left'] = sum(self.formatted_msg['ranges'][partitions[1]:partitions[2]])/len(self.formatted_msg['ranges'][partitions[1]:partitions[2]])
 
         return partitioned_vision
 
@@ -152,7 +152,9 @@ class SpinLeft(smach.State):
 
     def execute(self, userdata):
         MoveRobot('left')
-        if userdata.detect_center < 10.0:
+        ws.stepPhysics(steps=1)
+        scan_data = scan.getLeftCenterRightScanState()
+        if scan_data['center'] < 10.0:
             return 'drive_forward'
         else: 
             return 'spin_left'
@@ -164,7 +166,9 @@ class SpinRight(smach.State):
 
     def execute(self, userdata):
         MoveRobot('right')
-        if userdata.detect_center < 10.0:
+        ws.stepPhysics(steps=1)
+        scan_data = scan.getLeftCenterRightScanState()
+        if scan_data['center'] < 10.0:
             return 'drive_forward'
         else: 
             return 'spin_right'
@@ -177,11 +181,13 @@ class DriveForward(smach.State):
 
     def execute(self, userdata):
         MoveRobot('forward')
-        if userdata.detect_center < self.threshold:
+        ws.stepPhysics(steps=1)
+        scan_data = scan.getLeftCenterRightScanState()
+        if scan_data['center'] < self.threshold:
             return 'within_threshold'
-        elif userdata.detect_center < 10.0: 
+        elif scan_data['center'] < 10.0: 
             return 'drive_forward'
-        elif userdata.detect_leftt < 10.0 and userdata.detect_center >= 10.0 and userdata.detect_right >= 10.0: 
+        elif scan_data['left'] < 10.0 and scan_data['center'] >= 10.0 and scan_data['right'] >= 10.0: 
             return 'spin_left'
         else:
             return 'spin_right'
@@ -193,7 +199,9 @@ class Stop(smach.State):
 
     def execute(self, userdata):
         MoveRobot('stop')
-        if userdata.detect_center < 10.0:
+        ws.stepPhysics(steps=1)
+        scan_data = scan.getLeftCenterRightScanState()
+        if scan_data['center'] < 10.0:
             return 'succeeded'
         else:
             return 'spin_right'
