@@ -10,7 +10,7 @@
   <!-- </gazebo> -->
 
   <!-- Link1 -->
-  <gazebo reference="chassis">
+  <gazebo reference="base_link">
     <material>Gazebo/Orange</material>
   </gazebo>
   
@@ -19,6 +19,26 @@
   </gazebo>
   
   <gazebo reference="left_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="front_caster">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="back_caster">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="right_eye">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="left_eye">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="base_laser_link">
     <material>Gazebo/Black</material>
   </gazebo>
 </robot>
