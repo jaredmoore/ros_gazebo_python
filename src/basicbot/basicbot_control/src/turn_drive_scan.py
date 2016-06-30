@@ -170,7 +170,6 @@ class SpinRight(smach.State):
         MoveRobot('right')
         ws.stepPhysics(steps=1)
         scan_data = scan.getLeftCenterRightScanState()
-        print(scan_data)
         if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
         else: 
