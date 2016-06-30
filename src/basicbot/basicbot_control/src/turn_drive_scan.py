@@ -202,6 +202,8 @@ class Stop(smach.State):
         scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < 10.0:
             return 'succeeded'
+        elif final_time <= getWorldProp().sim_time:
+            return 'failed'
         else:
             return 'spin_right'
 
@@ -227,7 +229,7 @@ rospy.init_node('wander')
 ls = GetLinkStates()
 scan = GetLaserScanner()
 
-sm = smach.StateMachine(outcomes=['succeeded'])
+sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
 with sm:
         smach.StateMachine.add('SPIN_RIGHT', SpinRight(), transitions={ 'spin_right':'SPIN_RIGHT',
@@ -241,10 +243,14 @@ with sm:
             'spin_left':'SPIN_LEFT',
             'within_threshold':'STOP'
             })
-        smach.StateMachine.add('STOP', Stop(), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT'})
+        smach.StateMachine.add('STOP', Stop(), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
 
         outcome = sm.execute()
 
 current_time = getWorldProp().sim_time 
 print("Current Time: "+str(current_time))
-print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
+
+if outcome == 'succeeded':
+    print(scan.getLeftCenterRightScanState())
+else:
+    print("Robot failed to find the cylinder in time.")
