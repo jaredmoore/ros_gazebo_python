@@ -284,3 +284,6 @@ if outcome == 'succeeded':
     print(scan.getLeftCenterRightScanState())
 else:
     print("Robot failed to find the cylinder in time.")
+
+resetWorld()
+resetSimulation()
