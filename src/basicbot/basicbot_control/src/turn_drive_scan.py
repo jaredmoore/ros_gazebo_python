@@ -225,13 +225,6 @@ class Stop(smach.State):
 
 ###########################
 
-genome = {
-    'center_spin_thresh': random.random()*10.0,
-    'center_drive_thresh': 9.0 + random.random() * 1.0,
-    'center_stop_thresh': random.random() * 10.0,
-    'stopping_thresh': random.random() * 10.0
-}
-
 # Setup the reset world and reset simulation services
 rospy.wait_for_service('/gazebo/get_world_properties')
 rospy.wait_for_service('/gazebo/reset_world')
@@ -252,38 +245,47 @@ rospy.init_node('wander', log_level=rospy.WARN)
 ls = GetLinkStates()
 scan = GetLaserScanner()
 
-sm = smach.StateMachine(outcomes=['succeeded','failed'])
+for i in range(5):
 
-# Set the first timestep
-ws.stepPhysics(steps=1)
-current_time = getWorldProp().sim_time 
-final_time = getWorldProp().sim_time + 20.0
-print(genome)
+    genome = {
+        'center_spin_thresh': random.random()*10.0,
+        'center_drive_thresh': 9.0 + random.random() * 1.0,
+        'center_stop_thresh': random.random() * 10.0,
+        'stopping_thresh': random.random() * 10.0
+    }
 
-with sm:
-        smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
-            'drive_forward':'DRIVE_FORWARD','failed':'failed'
-            })
-        smach.StateMachine.add('SPIN_LEFT', SpinLeft(genome['center_drive_thresh']), transitions={ 'spin_left':'SPIN_LEFT',
-            'drive_forward':'DRIVE_FORWARD','failed':'failed'
-            })
-        smach.StateMachine.add('DRIVE_FORWARD', DriveForward(genome['center_stop_thresh'],genome['center_spin_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
-            'drive_forward':'DRIVE_FORWARD',
-            'spin_left':'SPIN_LEFT',
-            'within_threshold':'STOP',
-            'failed':'failed'
-            })
-        smach.StateMachine.add('STOP', Stop(genome['stopping_thresh']), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
+    sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
-        outcome = sm.execute()
+    # Set the first timestep
+    ws.stepPhysics(steps=1)
+    current_time = getWorldProp().sim_time 
+    final_time = getWorldProp().sim_time + 20.0
+    print(genome)
 
-current_time = getWorldProp().sim_time 
-print("Current Time: "+str(current_time))
+    with sm:
+            smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
+                'drive_forward':'DRIVE_FORWARD','failed':'failed'
+                })
+            smach.StateMachine.add('SPIN_LEFT', SpinLeft(genome['center_drive_thresh']), transitions={ 'spin_left':'SPIN_LEFT',
+                'drive_forward':'DRIVE_FORWARD','failed':'failed'
+                })
+            smach.StateMachine.add('DRIVE_FORWARD', DriveForward(genome['center_stop_thresh'],genome['center_spin_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
+                'drive_forward':'DRIVE_FORWARD',
+                'spin_left':'SPIN_LEFT',
+                'within_threshold':'STOP',
+                'failed':'failed'
+                })
+            smach.StateMachine.add('STOP', Stop(genome['stopping_thresh']), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
 
-if outcome == 'succeeded':
-    print(scan.getLeftCenterRightScanState())
-else:
-    print("Robot failed to find the cylinder in time.")
+            outcome = sm.execute()
 
-resetWorld()
-resetSimulation()
+    current_time = getWorldProp().sim_time 
+    print("Current Time: "+str(current_time))
+
+    if outcome == 'succeeded':
+        print(scan.getLeftCenterRightScanState())
+    else:
+        print("Robot failed to find the cylinder in time.")
+
+    resetWorld()
+    resetSimulation()
