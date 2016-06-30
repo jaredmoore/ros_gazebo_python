@@ -138,6 +138,11 @@ def MoveRobot(movement):
     """ Movements: 'left', 'forward', 'right', 'stop' """
     cmd_vel_pub.publish(twist[movement])
 
+def checkAtFinalTime():
+    """ Check to see if we have exceeded the execution time. """
+    if final_time <= getWorldProp().sim_time:
+        return True
+    return False
 ###########################
 
 import smach
@@ -147,13 +152,15 @@ import smach_ros
 
 class SpinLeft(smach.State):
     def __init__(self, forward_threshold):
-        smach.State.__init__(self, outcomes=['spin_left','drive_forward'],
+        smach.State.__init__(self, outcomes=['spin_left','drive_forward','failed'],
             input_keys=['detect_center'])
         self.forward_threshold = forward_threshold
 
     def execute(self, userdata):
         MoveRobot('left')
         ws.stepPhysics(steps=1)
+        if checkAtFinalTime():
+            return 'failed'
         scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
@@ -162,13 +169,15 @@ class SpinLeft(smach.State):
 
 class SpinRight(smach.State):
     def __init__(self, forward_threshold):
-        smach.State.__init__(self, outcomes=['spin_right','drive_forward'],
+        smach.State.__init__(self, outcomes=['spin_right','drive_forward','failed'],
             input_keys=['detect_center'])
         self.forward_threshold = forward_threshold
 
     def execute(self, userdata):
         MoveRobot('right')
         ws.stepPhysics(steps=1)
+        if checkAtFinalTime():
+            return 'failed'
         scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
@@ -177,7 +186,7 @@ class SpinRight(smach.State):
 
 class DriveForward(smach.State):
     def __init__(self, threshold, spin_threshold):
-        smach.State.__init__(self, outcomes=['spin_right','drive_forward','spin_left','within_threshold'],
+        smach.State.__init__(self, outcomes=['spin_right','drive_forward','spin_left','within_threshold','failed'],
             input_keys=['detect_center','detect_right','detect_left'])
         self.threshold = threshold
         self.spin_threshold = spin_threshold
@@ -185,6 +194,8 @@ class DriveForward(smach.State):
     def execute(self, userdata):
         MoveRobot('forward')
         ws.stepPhysics(steps=1)
+        if checkAtFinalTime():
+            return 'failed'
         scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.threshold:
             return 'within_threshold'
@@ -204,11 +215,11 @@ class Stop(smach.State):
     def execute(self, userdata):
         MoveRobot('stop')
         ws.stepPhysics(steps=1)
+        if checkAtFinalTime():
+            return 'failed'
         scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.stop_thresh:
             return 'succeeded'
-        elif final_time <= getWorldProp().sim_time:
-            return 'failed'
         else:
             return 'spin_right'
 
@@ -251,15 +262,16 @@ print(genome)
 
 with sm:
         smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
-            'drive_forward':'DRIVE_FORWARD'
+            'drive_forward':'DRIVE_FORWARD','failed':'failed'
             })
         smach.StateMachine.add('SPIN_LEFT', SpinLeft(genome['center_drive_thresh']), transitions={ 'spin_left':'SPIN_LEFT',
-            'drive_forward':'DRIVE_FORWARD'
+            'drive_forward':'DRIVE_FORWARD','failed':'failed'
             })
         smach.StateMachine.add('DRIVE_FORWARD', DriveForward(genome['center_stop_thresh'],genome['center_spin_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
             'drive_forward':'DRIVE_FORWARD',
             'spin_left':'SPIN_LEFT',
-            'within_threshold':'STOP'
+            'within_threshold':'STOP',
+            'failed':'failed'
             })
         smach.StateMachine.add('STOP', Stop(genome['stopping_thresh']), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
 
