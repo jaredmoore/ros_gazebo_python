@@ -116,6 +116,8 @@ class GetLaserScanner(object):
 
 ###########################
 
+final_time = 0.0
+
 # Setup the driving messages.
 twist = {}
 twist['forward'] = Twist()
@@ -144,39 +146,42 @@ import smach_ros
 # Define the states for the robot
 
 class SpinLeft(smach.State):
-    def __init__(self):
+    def __init__(self, forward_threshold):
         smach.State.__init__(self, outcomes=['spin_left','drive_forward'],
             input_keys=['detect_center'])
+        self.forward_threshold = forward_threshold
 
     def execute(self, userdata):
         MoveRobot('left')
         ws.stepPhysics(steps=1)
         scan_data = scan.getLeftCenterRightScanState()
-        if scan_data['center'] < 10.0:
+        if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
         else: 
             return 'spin_left'
 
 class SpinRight(smach.State):
-    def __init__(self):
+    def __init__(self, forward_threshold):
         smach.State.__init__(self, outcomes=['spin_right','drive_forward'],
             input_keys=['detect_center'])
+        self.forward_threshold = forward_threshold
 
     def execute(self, userdata):
         MoveRobot('right')
         ws.stepPhysics(steps=1)
         scan_data = scan.getLeftCenterRightScanState()
         print(scan_data)
-        if scan_data['center'] < 10.0:
+        if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
         else: 
             return 'spin_right'
 
 class DriveForward(smach.State):
-    def __init__(self):
+    def __init__(self, threshold, spin_threshold):
         smach.State.__init__(self, outcomes=['spin_right','drive_forward','spin_left','within_threshold'],
             input_keys=['detect_center','detect_right','detect_left'])
-        self.threshold = 5.0
+        self.threshold = threshold
+        self.spin_threshold = spin_threshold
 
     def execute(self, userdata):
         MoveRobot('forward')
@@ -186,21 +191,22 @@ class DriveForward(smach.State):
             return 'within_threshold'
         elif scan_data['center'] < 10.0: 
             return 'drive_forward'
-        elif scan_data['left'] < 10.0 and scan_data['center'] >= 10.0 and scan_data['right'] >= 10.0: 
+        elif scan_data['left'] < self.spin_threshold and scan_data['center'] >= 10.0 and scan_data['right'] >= 10.0: 
             return 'spin_left'
         else:
             return 'spin_right'
 
 class Stop(smach.State):
-    def __init__(self):
+    def __init__(self, stop_thresh):
         smach.State.__init__(self, outcomes=['succeeded','spin_right','failed'],
             input_keys=['detect_center'])
+        self.stop_thresh = stop_thresh
 
     def execute(self, userdata):
         MoveRobot('stop')
         ws.stepPhysics(steps=1)
         scan_data = scan.getLeftCenterRightScanState()
-        if scan_data['center'] < 10.0:
+        if scan_data['center'] < self.stop_thresh:
             return 'succeeded'
         elif final_time <= getWorldProp().sim_time:
             return 'failed'
@@ -208,6 +214,13 @@ class Stop(smach.State):
             return 'spin_right'
 
 ###########################
+
+genome = {
+    'center_spin_thresh': random.random()*10.0,
+    'center_drive_thresh': random.random() * 10.0,
+    'center_stop_thresh': random.random() * 10.0,
+    'stopping_thresh': random.random() * 10.0
+}
 
 # Setup the reset world and reset simulation services
 rospy.wait_for_service('/gazebo/get_world_properties')
@@ -231,19 +244,25 @@ scan = GetLaserScanner()
 
 sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
+# Set the first timestep
+ws.stepPhysics(steps=1)
+current_time = getWorldProp().sim_time 
+final_time = getWorldProp().sim_time + 20.0
+print(genome)
+
 with sm:
-        smach.StateMachine.add('SPIN_RIGHT', SpinRight(), transitions={ 'spin_right':'SPIN_RIGHT',
+        smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
             'drive_forward':'DRIVE_FORWARD'
             })
-        smach.StateMachine.add('SPIN_LEFT', SpinLeft(), transitions={ 'spin_left':'SPIN_LEFT',
+        smach.StateMachine.add('SPIN_LEFT', SpinLeft(genome['center_drive_thresh']), transitions={ 'spin_left':'SPIN_LEFT',
             'drive_forward':'DRIVE_FORWARD'
             })
-        smach.StateMachine.add('DRIVE_FORWARD', DriveForward(), transitions={ 'spin_right':'SPIN_RIGHT',
+        smach.StateMachine.add('DRIVE_FORWARD', DriveForward(genome['center_stop_thresh'],genome['center_spin_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
             'drive_forward':'DRIVE_FORWARD',
             'spin_left':'SPIN_LEFT',
             'within_threshold':'STOP'
             })
-        smach.StateMachine.add('STOP', Stop(), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
+        smach.StateMachine.add('STOP', Stop(genome['stopping_thresh']), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
 
         outcome = sm.execute()
 
