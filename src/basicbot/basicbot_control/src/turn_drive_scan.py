@@ -193,7 +193,7 @@ class DriveForward(smach.State):
 
 class Stop(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['succeeded','spin_right'],
+        smach.State.__init__(self, outcomes=['succeeded','spin_right','failed'],
             input_keys=['detect_center'])
 
     def execute(self, userdata):
