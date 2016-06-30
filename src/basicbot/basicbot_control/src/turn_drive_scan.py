@@ -235,7 +235,7 @@ resetSimulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
 ws = WorldStep()
 # Setup the messages we will use to drive the robot.
 cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
-rospy.init_node('wander')
+rospy.init_node('wander', log_level=rospy.WARN)
 
 # Setup the topic subscribers.
 ls = GetLinkStates()
