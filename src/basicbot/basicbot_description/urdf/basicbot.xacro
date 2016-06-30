@@ -20,6 +20,10 @@
   <xacro:property name="caster_mass" value="0.1"/>
   <xacro:property name="caster_radius" value="${wheel_radius*chassis_lift_percentage}"/>
 
+  <!-- Eyes (Spheres) -->
+  <xacro:property name="eye_mass" value="0.1"/>
+  <xacro:property name="eye_radius" value="${wheel_radius*chassis_lift_percentage}"/>
+  
   <!-- vertical shift for entire robot -->
   <xacro:property name="vert_offset" value="${wheel_radius*chassis_lift_percentage+base_link_height/2.0}"/>
   
@@ -112,6 +116,42 @@
     </joint>
   </xacro:macro>
   
+  <!-- Eye Macro -->
+  <xacro:macro name="eye" params="prefix reflect">
+    <link name="${prefix}_eye" parent="base_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+        <geometry>
+          <sphere radius="${eye_radius}"/>
+        </geometry>
+      </collision>
+      
+      <visual>
+        <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+        <geometry>
+          <sphere radius="${eye_radius}"/>
+        </geometry>
+        <material name="blue"/> 
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+        <mass value="${eye_mass}"/>
+        <inertia
+          ixx="${(2.0*eye_mass*eye_radius*eye_radius)/5.0}" ixy="0.0" ixz="0.0" 
+          iyy="${(2.0*eye_mass*eye_radius*eye_radius)/5.0}" iyz="0.0" 
+          izz="${(2.0*eye_mass*eye_radius*eye_radius)/5.0}" 
+        />
+      </inertial>
+    </link>
+
+    <joint name="${prefix}_eye_to_base_link" type="continuous">
+      <origin xyz="${reflect*(-eye_radius+base_link_radius)} 0 ${eye_radius+base_link_height}" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="${prefix}_eye"/>
+    </joint>
+  </xacro:macro>
+  
   <!-- Base Link -->
   <link name="base_link">
     <collision>
@@ -150,6 +190,32 @@
   <xacro:caster prefix="front" reflect="1.0" xmod="-0.75"/>
   <xacro:caster prefix="back" reflect="-1.0" xmod="-0.75"/>
 
+  <!-- Eye -->
+  <xacro:eye prefix="right" reflect="-1.0"/>
+  <xacro:eye prefix="left" reflect="1.0"/>
+  
+  <link name="base_laser_link">
+    <visual>
+      <geometry>
+        <box size="0.00 0.05 0.06" />
+      </geometry>
+      <material name="Green" />
+    </visual>
+    <inertial>
+      <mass value="0.000001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+        iyy="0.0001" iyz="0.0"
+        izz="0.0001" />
+    </inertial>
+  </link>
+
+  <joint name="laser" type="fixed">
+    <origin xyz="0.00 ${base_link_radius} ${base_link_height/2.0}" rpy="0 0 1.5707" />
+    <parent link="base_link" />
+    <child link="base_laser_link" />
+  </joint>
+
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <leftJoint>left_wheel_to_base_link</leftJoint>
@@ -160,4 +226,32 @@
       <publishWheelJointState>true</publishWheelJointState>
     </plugin>
   </gazebo>
+
+  <gazebo reference="base_laser_link">
+      <sensor name="ray_sensor" type="ray">
+        <pose>0.01 0 0.0175 0 -0 0</pose>
+        <update_rate>20</update_rate>
+        <visualize>true</visualize>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>7</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.6981</min_angle>
+              <max_angle>0.6981</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.08</min>
+            <max>10</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+        <plugin name="laser_node" filename="libgazebo_ros_laser.so">
+           <topicName>/laser_scanner</topicName>
+           <frameName>base_laser_link</frameName>
+        </plugin>
+      </sensor>
+  </gazebo>
+
 </robot>
