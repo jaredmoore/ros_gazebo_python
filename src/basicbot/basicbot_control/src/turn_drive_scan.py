@@ -277,6 +277,9 @@ for i in range(5):
                 })
             smach.StateMachine.add('STOP', Stop(genome['stopping_thresh']), transitions={ 'succeeded':'succeeded', 'spin_right':'SPIN_RIGHT', 'failed':'failed'})
 
+            sis = smach_ros.IntrospectionServer('test_sm',sm,'/SM_ROOT')
+            sis.start()
+
             outcome = sm.execute()
 
     current_time = getWorldProp().sim_time 
