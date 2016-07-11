@@ -33,3 +33,5 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 add_executable(step_world_server src/step_world.cpp)
 target_link_libraries(step_world_server ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 add_dependencies(step_world_server world_step_gencpp)
+
+catkin_python_setup()
