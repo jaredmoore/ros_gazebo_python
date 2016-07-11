@@ -20,7 +20,7 @@ from geometry_msgs.msg import Twist
 from gazebo_msgs.srv import GetWorldProperties
 from gazebo_msgs.msg import LinkStates
 
-from world_step.src import WorldStep
+from world_step import WorldStep
 
 # from world_step.srv import step_world 
 
