@@ -18,57 +18,43 @@ from sensor_msgs.msg import LaserScan
 
 from geometry_msgs.msg import Twist
 from gazebo_msgs.srv import GetWorldProperties
-from gazebo_msgs.msg import LinkStates
+# from gazebo_msgs.msg import LinkStates
 
+from basicbot_utils import GetLinkStates
 from world_step import WorldStep
-
-# from world_step.srv import step_world 
-
-# class WorldStep(object):
-#     """ Connect to the step_world service and handle stepping the physics simulation. """
-
-#     def __init__(self):
-#         # Wait for the StepWorld node to start.
-#         rospy.wait_for_service('step_world')
-#         self.step = rospy.ServiceProxy('step_world',step_world)
-    
-#     def stepPhysics(self,steps=1):
-#         """ Step the simulation. """
-#         self.step()
-
 
 ###########################
 
-class GetLinkStates(object):
-    """ Connect to the /gazebo/link_states topic and get information about each link. 
-        Message has three lists: name, pose, twist
-    """
+# class GetLinkStates(object):
+#     """ Connect to the /gazebo/link_states topic and get information about each link. 
+#         Message has three lists: name, pose, twist
+#     """
 
-    def __init__(self):
-        rospy.Subscriber('/gazebo/link_states', LinkStates, self.lsCallback)
+#     def __init__(self):
+#         rospy.Subscriber('/gazebo/link_states', LinkStates, self.lsCallback)
 
-        self.msg = ""
-        self.formatted_msg = {}
+#         self.msg = ""
+#         self.formatted_msg = {}
 
-    def lsCallback(self,msg):
-        """ Callback for the link_states topic. """
-        self.msg = msg
-        for n,p,t in zip(msg.name,msg.pose,msg.twist):
-            self.formatted_msg[n] = {'pose':p,'twist':t}
+#     def lsCallback(self,msg):
+#         """ Callback for the link_states topic. """
+#         self.msg = msg
+#         for n,p,t in zip(msg.name,msg.pose,msg.twist):
+#             self.formatted_msg[n] = {'pose':p,'twist':t}
 
-    def getStates(self):
-        """ Return the last received message. """
-        if self.msg:
-            return type(self.msg.pose)
-        else:
-            return ""
+#     def getStates(self):
+#         """ Return the last received message. """
+#         if self.msg:
+#             return type(self.msg.pose)
+#         else:
+#             return ""
     
-    def getLinkPose(self,link):
-        """ Return the pose of a specific link from the last message. """
-        if link in self.formatted_msg:
-            return self.formatted_msg[link]['pose']
-        else:
-            return ""
+#     def getLinkPose(self,link):
+#         """ Return the pose of a specific link from the last message. """
+#         if link in self.formatted_msg:
+#             return self.formatted_msg[link]['pose']
+#         else:
+#             return ""
 
 ###########################
 
