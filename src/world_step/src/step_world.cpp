@@ -3,7 +3,7 @@
 #include <boost/thread.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <gazebo/gazebo.hh>
+#include <gazebo/gazebo_client.hh>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/msgs/msgs.hh>
 #include <gazebo/transport/transport.hh>
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   ros::NodeHandle n;
   
   // Setup the Gazebo node that will step the simulation.
-  gazebo::setupClient(argc,argv);
+  gazebo::client::setup(argc,argv);
   gazebo::transport::NodePtr node(new gazebo::transport::Node());
   node->Init();
 
