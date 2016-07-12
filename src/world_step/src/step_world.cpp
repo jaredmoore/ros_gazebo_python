@@ -3,7 +3,7 @@
 #include <boost/thread.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <gazebo/gazebo.hh>
+#include <gazebo/gazebo_client.hh>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/msgs/msgs.hh>
 #include <gazebo/transport/transport.hh>
