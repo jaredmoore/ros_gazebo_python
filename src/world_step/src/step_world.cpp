@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   ros::NodeHandle n;
   
   // Setup the Gazebo node that will step the simulation.
-  gazebo::setupClient(argc,argv);
+  gazebo::client::setup(argc,argv);
   gazebo::transport::NodePtr node(new gazebo::transport::Node());
   node->Init();
 
