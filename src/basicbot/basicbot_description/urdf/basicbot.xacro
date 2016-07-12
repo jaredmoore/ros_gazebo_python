@@ -218,6 +218,7 @@
 
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <legacyMode>false</legacyMode>
       <rosDebugLevel>Error</rosDebugLevel>
       <commandTopic>cmd_vel</commandTopic>
       <leftJoint>left_wheel_to_base_link</leftJoint>
