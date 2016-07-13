@@ -43,6 +43,8 @@ class GetLaserScanner(object):
             partitions[1] = partitions[0] + partitions[1]
             partitions[2] = partitions[1] + partitions[2]
 
+            print(self.formatted_msg['ranges'])
+
             # Get right, center, and left averages.
             partitioned_vision['right'] = sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]])
             partitioned_vision['center'] = sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]])
