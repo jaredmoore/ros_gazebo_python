@@ -2,6 +2,7 @@
     Get laser scanner information for the basicbot.
 """
 
+import numpy as np
 import rospy
 
 from sensor_msgs.msg import LaserScan
@@ -20,7 +21,9 @@ class GetLaserScanner(object):
     def lsCallback(self,msg):
         """ Callback for the laser_scanner topic. """
         self.msg = msg
-        self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum(msg.ranges), 'ranges':msg.ranges}
+
+        # Correct for infinite values by replacing them with max range.
+        self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum([i if i != np.inf else msg.range_max for i in msg.ranges]), 'ranges':[i if i != np.inf else msg.range_max for i in msg.ranges]}
 
     def getScanState(self):
         """ Get the current scan information. """
@@ -42,8 +45,6 @@ class GetLaserScanner(object):
             # Calculate the index offsets.
             partitions[1] = partitions[0] + partitions[1]
             partitions[2] = partitions[1] + partitions[2]
-
-            print(self.formatted_msg['ranges'])
 
             # Get right, center, and left averages.
             partitioned_vision['right'] = sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]])
