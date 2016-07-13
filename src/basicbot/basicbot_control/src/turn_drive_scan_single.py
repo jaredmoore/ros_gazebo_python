@@ -209,3 +209,4 @@ else:
 
 resetWorld()
 resetSimulation()
+rospy.signal_shutdown("Node has finished it's task.")
