@@ -36,7 +36,7 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   pub->Publish(msg);
   std::cout << "Published step message to Gazebo." << std::endl;
 
-  std::unique_lock<<std::mutex>> lck(mtx);
+  std::unique_lock<std::mutex> lck(mtx);
   cv.wait(lck);
   //while(!stepped) {
   //  sleep(0);
