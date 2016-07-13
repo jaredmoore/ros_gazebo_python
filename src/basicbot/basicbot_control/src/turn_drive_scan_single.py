@@ -64,12 +64,11 @@ def update_world(mv_command):
             scan_data: if None, failed state
     """
     MoveRobot(mv_command)
-    print("Stepping Physics")
     ws.stepPhysics(steps=1)
-    print("Physics Stepped")
     if checkAtFinalTime():
         return None
     scan_data = scan.getLeftCenterRightScanState()
+    print(scan_data)
     return scan_data
 
 ###########################
@@ -172,8 +171,6 @@ genome = {
     'center_stop_thresh': random.random() * 10.0,
     'stopping_thresh': random.random() * 10.0
 }
-
-print(genome)
 
 sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
