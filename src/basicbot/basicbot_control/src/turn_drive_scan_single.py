@@ -68,7 +68,6 @@ def update_world(mv_command):
     if checkAtFinalTime():
         return None
     scan_data = scan.getLeftCenterRightScanState()
-    print(scan_data)
     return scan_data
 
 ###########################
