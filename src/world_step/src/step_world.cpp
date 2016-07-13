@@ -25,7 +25,7 @@ std::condition_variable cv;
 void world_steppedCB(ConstIntPtr &_msg) {
   ROS_WARN("Stepped Received.");
   stepped = 1;
-  cv.notify_one();
+  //cv.notify_one();
 }
 
 //bool step(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
@@ -36,11 +36,10 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   pub->Publish(msg);
   ROS_WARN("Published step message to Gazebo.");
 
-  std::unique_lock<std::mutex> lck(mtx);
-  cv.wait(lck);
-  //while(!stepped) {
-  //  sleep(0);
-  //}
+  //std::unique_lock<std::mutex> lck(mtx);
+  //cv.wait(lck);
+  while(!stepped) {
+  }
   stepped = 0;
 
   ROS_WARN("ROS Step Response Set.");
