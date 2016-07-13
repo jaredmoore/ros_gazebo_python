@@ -207,4 +207,5 @@ if outcome == 'succeeded':
 else:
     print("Robot failed to find the cylinder in time.")
 
-exit()
+resetWorld()
+resetSimulation()
