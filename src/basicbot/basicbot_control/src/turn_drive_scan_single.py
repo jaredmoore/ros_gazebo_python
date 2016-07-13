@@ -173,6 +173,8 @@ genome = {
     'stopping_thresh': random.random() * 10.0
 }
 
+print(genome)
+
 sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
 # Set the first timestep
