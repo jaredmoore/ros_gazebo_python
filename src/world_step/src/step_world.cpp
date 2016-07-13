@@ -23,7 +23,6 @@ std::mutex mtx;
 std::condition_variable cv;
 
 void world_steppedCB(ConstIntPtr &_msg) {
-  ROS_WARN("Stepped Received.");
   stepped = 1;
   //cv.notify_one();
 }
@@ -34,15 +33,14 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   gazebo::msgs::WorldControl msg;
   msg.set_step(1);
   pub->Publish(msg);
-  ROS_WARN("Published step message to Gazebo.");
 
   //std::unique_lock<std::mutex> lck(mtx);
   //cv.wait(lck);
+
   while(!stepped) {
   }
   stepped = 0;
 
-  ROS_WARN("ROS Step Response Set.");
   response.stepped = true;
   
   return true;
