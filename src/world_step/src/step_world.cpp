@@ -21,6 +21,7 @@ int stepped;
 
 std::mutex mtx;
 std::condition_variable cv;
+std::unique_lock<std::mutex> lck(mtx);
 
 void world_steppedCB(ConstIntPtr &_msg) {
   stepped = 1;
@@ -34,7 +35,6 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   msg.set_step(1);
   pub->Publish(msg);
 
-  std::unique_lock<std::mutex> lck(mtx);
   cv.wait(lck);
 
   //while(!stepped) {
