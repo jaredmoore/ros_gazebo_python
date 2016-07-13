@@ -12,4 +12,6 @@ class WorldStep(object):
     
     def stepPhysics(self,steps=1):
         """ Step the simulation. """
+        print("Attempting step call.")
         self.step()
+        print("Step Called.")
