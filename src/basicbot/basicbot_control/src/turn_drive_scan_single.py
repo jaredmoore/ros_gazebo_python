@@ -25,52 +25,6 @@ from world_step import WorldStep
 
 ###########################
 
-# class GetLaserScanner(object):
-#     """ Connect to /laser_scanner rostopic and get information about the sensor.
-#     Message format is: 
-#     """
-
-#     def __init__(self):
-#         rospy.Subscriber('/laser_scanner', LaserScan, self.lsCallback)
-
-#         self.msg = ""
-#         self.formatted_msg = ""
-
-#     def lsCallback(self,msg):
-#         """ Callback for the laser_scanner topic. """
-#         self.msg = msg
-#         self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum(msg.ranges), 'ranges':msg.ranges}
-
-#     def getScanState(self):
-#         """ Get the current scan information. """
-#         return self.formatted_msg
-        
-#     def getLeftCenterRightScanState(self):
-#         """ Divide the vision into three sections and report on their average sum. """
-
-#         partitioned_vision = {'right':10.0,'left':10.0,'center':10.0}
-
-#         # If no message yet return blank
-#         if self.formatted_msg:
-#             partitions = [len(self.formatted_msg['ranges'])/3 for i in range(3)]
-
-#             # Add additional ones to middle if don't match sum.
-#             if sum(partitions) < len(self.formatted_msg['ranges']):
-#                 partitions[1] += len(self.formatted_msg['ranges']) - sum(partitions)
-
-#             # Calculate the index offsets.
-#             partitions[1] = partitions[0] + partitions[1]
-#             partitions[2] = partitions[1] + partitions[2]
-
-#             # Get right, center, and left averages.
-#             partitioned_vision['right'] = sum(self.formatted_msg['ranges'][0:partitions[0]])/len(self.formatted_msg['ranges'][0:partitions[0]])
-#             partitioned_vision['center'] = sum(self.formatted_msg['ranges'][partitions[0]:partitions[1]])/len(self.formatted_msg['ranges'][partitions[0]:partitions[1]])
-#             partitioned_vision['left'] = sum(self.formatted_msg['ranges'][partitions[1]:partitions[2]])/len(self.formatted_msg['ranges'][partitions[1]:partitions[2]])
-
-#         return partitioned_vision
-
-###########################
-
 final_time = 0.0
 
 # Setup the driving messages.
@@ -98,6 +52,26 @@ def checkAtFinalTime():
     if final_time <= getWorldProp().sim_time:
         return True
     return False
+
+def update_world(mv_command):
+    """ Update the world by processing the move command, stepping the world
+        and checking for final time failure.
+
+        Args:
+            mv_command: argument to move.
+
+        Returns:
+            scan_data: if None, failed state
+    """
+    MoveRobot(mv_command)
+    print("Stepping Physics")
+    ws.stepPhysics(steps=1)
+    print("Physics Stepped")
+    if checkAtFinalTime():
+        return None
+    scan_data = scan.getLeftCenterRightScanState()
+    return scan_data
+
 ###########################
 
 import smach
@@ -112,11 +86,9 @@ class SpinLeft(smach.State):
         self.forward_threshold = forward_threshold
 
     def execute(self, userdata):
-        MoveRobot('left')
-        ws.stepPhysics(steps=1)
-        if checkAtFinalTime():
+        scan_data = update_world('left')
+        if not scan_data:
             return 'failed'
-        scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
         else: 
@@ -129,11 +101,9 @@ class SpinRight(smach.State):
         self.forward_threshold = forward_threshold
 
     def execute(self, userdata):
-        MoveRobot('right')
-        ws.stepPhysics(steps=1)
-        if checkAtFinalTime():
+        scan_data = update_world('right')
+        if not scan_data:
             return 'failed'
-        scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.forward_threshold:
             return 'drive_forward'
         else: 
@@ -147,11 +117,9 @@ class DriveForward(smach.State):
         self.spin_threshold = spin_threshold
 
     def execute(self, userdata):
-        MoveRobot('forward')
-        ws.stepPhysics(steps=1)
-        if checkAtFinalTime():
+        scan_data = update_world('forward')
+        if not scan_data:
             return 'failed'
-        scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.threshold:
             return 'within_threshold'
         elif scan_data['center'] < 10.0: 
@@ -168,11 +136,9 @@ class Stop(smach.State):
         self.stop_thresh = stop_thresh
 
     def execute(self, userdata):
-        MoveRobot('stop')
-        ws.stepPhysics(steps=1)
-        if checkAtFinalTime():
+        scan_data = update_world('stop')
+        if not scan_data:
             return 'failed'
-        scan_data = scan.getLeftCenterRightScanState()
         if scan_data['center'] < self.stop_thresh:
             return 'succeeded'
         else:
