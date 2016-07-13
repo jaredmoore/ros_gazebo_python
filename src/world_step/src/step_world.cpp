@@ -1,3 +1,4 @@
+#include <condition_variable>
 #include <math.h>
 
 #include <boost/thread.hpp>
@@ -18,8 +19,13 @@ gazebo::transport::SubscriberPtr sub;
 
 int stepped;
 
+std::mutex mtx;
+std::condition_variable cv;
+
 void world_steppedCB(ConstIntPtr &_msg) {
+  std::cout << "Stepped Received." << std::endl;
   stepped = 1;
+  cv.notify_one();
 }
 
 //bool step(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
@@ -28,12 +34,16 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   gazebo::msgs::WorldControl msg;
   msg.set_step(1);
   pub->Publish(msg);
+  std::cout << "Published step message to Gazebo." << std::endl;
 
-  while(!stepped) {
-    sleep(0);
-  }
+  unique_lock<<std::mutex>> lck(mtx);
+  cv.wait(lck);
+  //while(!stepped) {
+  //  sleep(0);
+  //}
   stepped = 0;
 
+  std::cout << "ROS Step Response Set." << std::endl;
   response.stepped = true;
   
   return true;
