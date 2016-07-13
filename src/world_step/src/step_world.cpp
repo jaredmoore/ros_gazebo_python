@@ -35,9 +35,9 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   msg.set_step(1);
   pub->Publish(msg);
 
-  lck.lock()
+  lck.lock();
   cv.wait(lck);
-  lck.unlock()
+  lck.unlock();
 
   //while(!stepped) {
   //}
