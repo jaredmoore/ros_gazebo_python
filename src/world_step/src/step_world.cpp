@@ -24,7 +24,7 @@ std::condition_variable cv;
 
 void world_steppedCB(ConstIntPtr &_msg) {
   stepped = 1;
-  //cv.notify_one();
+  cv.notify_one();
 }
 
 //bool step(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
@@ -34,11 +34,11 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   msg.set_step(1);
   pub->Publish(msg);
 
-  //std::unique_lock<std::mutex> lck(mtx);
-  //cv.wait(lck);
+  std::unique_lock<std::mutex> lck(mtx);
+  cv.wait(lck);
 
-  while(!stepped) {
-  }
+  //while(!stepped) {
+  //}
   stepped = 0;
 
   response.stepped = true;
