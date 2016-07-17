@@ -1,0 +1,18 @@
+<launch>
+
+<group ns="basicbot_ga_1">
+<node name="adder_transporter" pkg="adding_service" type="adder_transporter.py" output="screen"></node>
+<node name="adder_worker" pkg="adding_service" type="adder.py" output="screen"></node>
+</group>
+
+<group ns="basicbot_ga_1">
+<node name="adder_transporter" pkg="adding_service" type="adder_transporter.py" output="screen"></node>
+<node name="adder_worker" pkg="adding_service" type="adder.py" output="screen"></node>
+</group>
+
+<group ns="basicbot_ga_1">
+<node name="adder_transporter" pkg="adding_service" type="adder_transporter.py" output="screen"></node>
+<node name="adder_worker" pkg="adding_service" type="adder.py" output="screen"></node>
+</group>
+
+</launch>
