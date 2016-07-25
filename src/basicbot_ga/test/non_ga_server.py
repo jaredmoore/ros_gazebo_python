@@ -10,10 +10,11 @@ import random
 import threading
  
 class senderThread(threading.Thread):
-    def __init__(self, threadID, socket):
+    def __init__(self, threadID, socket, num_genomes=10):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.socket = socket
+        self.num_genomes = num_genomes
  
     def run(self):
         print("\t\t\t\tStarting Sender Thread:"+str(self.threadID))
@@ -27,7 +28,7 @@ class senderThread(threading.Thread):
             socket: socket to send the data out on.
                 - Persistant throughout execution for now.
         """
-        for i in range(1):
+        for i in range(self.num_genomes):
             ind = {'id':i,'genome':[
                     random.random()*10.0, # center_spin_thresh
                     9.0 + random.random() * 1.0, # center_drive_thresh
@@ -52,12 +53,15 @@ print("Press Enter when the workers are ready: ")
 _ = raw_input()
 print("Sending tasks to workers")
  
+# How many genomes to test sending
+test_genome_num = 10
+
 # Start a thread to send the data.
-sendThread = senderThread(1, socket)
+sendThread = senderThread(1, socket, num_genomes=test_genome_num)
 sendThread.start()
  
 # Read the responses on the receiver socket.
-i = 10
+i = test_genome_num
 while i > 0:
     data = json.loads(receiver.recv())
     print(data['fitness'],data['id'])
