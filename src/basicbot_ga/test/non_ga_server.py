@@ -16,9 +16,9 @@ class senderThread(threading.Thread):
         self.socket = socket
  
     def run(self):
-        print("\t\t\t\tStarting "+str(self.threadID))
+        print("\t\t\t\tStarting Sender Thread:"+str(self.threadID))
         self.send_data()
-        print("\t\t\t\tExiting "+str(self.threadID))
+        print("\t\t\t\tExiting Sender Thread:"+str(self.threadID))
  
     def send_data(self):
         """ Send data to worker processes. 
@@ -27,7 +27,7 @@ class senderThread(threading.Thread):
             socket: socket to send the data out on.
                 - Persistant throughout execution for now.
         """
-        for i in range(10):
+        for i in range(1):
             ind = {'id':i,'genome':[
                     random.random()*10.0, # center_spin_thresh
                     9.0 + random.random() * 1.0, # center_drive_thresh
