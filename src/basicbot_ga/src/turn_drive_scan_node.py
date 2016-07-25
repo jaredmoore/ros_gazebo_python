@@ -47,6 +47,7 @@ def MoveRobot(movement):
 
 def checkAtFinalTime():
     """ Check to see if we have exceeded the execution time. """
+    global final_time
     if final_time <= getWorldProp().sim_time:
         return True
     return False
@@ -144,6 +145,8 @@ class Stop(smach.State):
 
 def simCallback(data):
     """ Callback to conduct a simulation. """
+    global final_time
+    
     genome_data = rospy.get_param('basicbot_genome')
 
     genome = {
