@@ -189,6 +189,7 @@ def simCallback(data):
 
     if outcome == 'succeeded':
         print(scan.getLeftCenterRightScanState())
+        print(pub)
         pub.Publish(current_time)
     else:
         print("Robot failed to find the cylinder in time.")
