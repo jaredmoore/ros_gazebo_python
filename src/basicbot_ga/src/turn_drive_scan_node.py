@@ -145,8 +145,8 @@ class Stop(smach.State):
 
 def simCallback(data):
     """ Callback to conduct a simulation. """
-    global final_time
-    
+    global final_time, pub
+
     genome_data = rospy.get_param('basicbot_genome')
 
     genome = {
@@ -189,6 +189,7 @@ def simCallback(data):
 
     if outcome == 'succeeded':
         print(scan.getLeftCenterRightScanState())
+        pub.Publish(current_time)
     else:
         print("Robot failed to find the cylinder in time.")
 
