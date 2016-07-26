@@ -148,6 +148,7 @@ def simCallback(data):
     global final_time, pub
 
     genome_data = rospy.get_param('basicbot_genome')
+    print("                 Got genome data of:"+str(genome_data))
 
     genome = {
         'center_spin_thresh': genome_data[0],
