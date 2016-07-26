@@ -30,6 +30,7 @@ sub = rospy.Subscriber('simulation_result', std_msgs.msg.Float64, callback)
 while True:
     # Get data off the pipe from the external source
     data = json.loads(receiver.recv())
+    print(data)
 
     # Load the data into a parameter in ROS
     rospy.set_param('basicbot_genome', data['genome'])
