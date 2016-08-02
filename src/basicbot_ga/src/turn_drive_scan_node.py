@@ -202,12 +202,17 @@ def simCallback(data):
 ###########################
 
 # Initial setup of the node, required services, etc.
+print("SPINNING UP WAITS")
 
 # Setup the reset world and reset simulation services
 rospy.wait_for_service('/gazebo/get_world_properties')
+print("SPINNING UP WAITS 1")
 rospy.wait_for_service('/gazebo/reset_world')
+print("SPINNING UP WAITS 2")
 rospy.wait_for_service('/gazebo/reset_simulation')
+print("SPINNING UP WAITS 3")
 rospy.wait_for_service('/gazebo/pause_physics')
+print("SPINNING UP WAITS 4")
 rospy.wait_for_service('/gazebo/unpause_physics')
 
 print("ROSPY SERVICES READY")
