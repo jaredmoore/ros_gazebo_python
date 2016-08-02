@@ -210,9 +210,13 @@ rospy.wait_for_service('/gazebo/reset_simulation')
 rospy.wait_for_service('/gazebo/pause_physics')
 rospy.wait_for_service('/gazebo/unpause_physics')
 
+print("ROSPY SERVICES READY")
+
 getWorldProp = rospy.ServiceProxy('/gazebo/get_world_properties', GetWorldProperties)
 resetWorld = rospy.ServiceProxy('/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+
+print("SERVICE PROXIES INITIATED")
 
 # Setup the WorldStep service object
 ws = WorldStep()
@@ -223,13 +227,19 @@ cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
 # Initialize the node.
 rospy.init_node('turn_drive_scan_node', log_level=rospy.WARN, anonymous=True)
 
+print("NODE INITIALIZED")
+
 # Setup the topic subscribers for getting the state of the robot and sensors.
 ls = GetLinkStates()
 scan = GetLaserScanner()
 
+print("SUB PUB SETTING UP")
+
 # Setup the callbacks for starting and reporting results.
 sub = rospy.Subscriber('simulation_start', std_msgs.msg.Empty, simCallback)
 pub = rospy.Publisher('simulation_result', std_msgs.msg.Float64, queue_size=1)
+
+print("turn_drive_scan is spun up and ready!")
 
 # Spin the node and wait for the callback.
 rospy.spin()
