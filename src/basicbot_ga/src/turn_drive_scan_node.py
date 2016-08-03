@@ -48,6 +48,7 @@ def MoveRobot(movement):
 def checkAtFinalTime():
     """ Check to see if we have exceeded the execution time. """
     global final_time
+    print(final_time, getWorldProp().sim_time)
     if final_time <= getWorldProp().sim_time:
         return True
     return False
