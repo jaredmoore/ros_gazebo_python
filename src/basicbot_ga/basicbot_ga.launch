@@ -2,6 +2,7 @@
 
 <!-- ********************* Begin Gazebo Defaults ******************************** -->
 
+<group ns="basicbot_ga_1">
 <!-- these are the arguments you can pass this launch file, for example paused:=true -->
   <arg name="paused" default="true"/>
   <arg name="use_sim_time" default="true"/>
@@ -39,13 +40,12 @@
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
-<group ns="basicbot_ga_1">
+<!-- <group ns="basicbot_ga_1"> -->
   <!-- start gazebo server-->
-  <!-- <env name="GAZEBO_MASTER_URI" value="http://localhost:11355"/> -->
+  <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
     output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
     $(arg extra_gazebo_args) $(arg world_name)">
-    <!--<env name="GAZEBO_MASTER_URI" value="http://localhost:11346"/>-->
   </node>
 
   <!-- Load the transporter node -->
