@@ -66,31 +66,4 @@
     args="-urdf -model basicbot -param robot_description"/>
 </group>
 
-<!--<group ns="basicbot_ga_2"> -->
-    <!-- start gazebo server-->
-<!--  <env name="GAZEBO_MASTER_URI" value="http://localhost:11347"/> -->
-<!--  <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)"  -->
-<!--    output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics)  -->
-<!--    $(arg extra_gazebo_args) $(arg world_name)"> -->
-<!--    <env name="GAZEBO_MASTER_URI" value="http://localhost:11347"/> -->
-<!--  </node> -->
-
-  <!-- Load the transporter node -->
-<!--  <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node> -->
-
-  <!-- Load the turn_drive_scan node -->
-<!--  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node> -->
-
-  <!-- Load the step world node -->
-<!--  <node name="step_world" pkg="world_step" type="step_world_server"/> -->
-
-  <!-- Load the URDF into the ROS Parameter Server -->
-<!--  <param name="robot_description" -->
-<!--    command="$(find xacro)/xacro '$(find basicbot_description)/urdf/basicbot.xacro'" /> -->
-
-  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-<!--  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" -->
-<!--    args="-urdf -model basicbot -param robot_description"/> -->
-<!--</group> -->
-
 </launch>
