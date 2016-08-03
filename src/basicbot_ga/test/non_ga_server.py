@@ -8,6 +8,8 @@ import zmq
 import random
  
 import threading
+
+random.seed(10)
  
 class senderThread(threading.Thread):
     def __init__(self, threadID, socket, num_genomes=10):
