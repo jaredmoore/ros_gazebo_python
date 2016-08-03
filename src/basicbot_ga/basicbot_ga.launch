@@ -2,7 +2,6 @@
 
 <!-- ********************* Begin Gazebo Defaults ******************************** -->
 
-<group ns="basicbot_ga_1">
 <!-- these are the arguments you can pass this launch file, for example paused:=true -->
   <arg name="paused" default="true"/>
   <arg name="use_sim_time" default="true"/>
@@ -64,6 +63,6 @@
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
     args="-urdf -model basicbot -param robot_description"/>
-</group>
+
 
 </launch>
