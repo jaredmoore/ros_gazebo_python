@@ -218,7 +218,6 @@
 
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-      <robotNamespace>$(arg robotName)</robotNamespace>
       <legacyMode>true</legacyMode>
       <rosDebugLevel>Error</rosDebugLevel>
       <commandTopic>cmd_vel</commandTopic>
@@ -252,7 +251,6 @@
           </range>
         </ray>
         <plugin name="laser_node" filename="libgazebo_ros_laser.so">
-           <robotNamespace>$(arg robotName)</robotNamespace>
            <topicName>/laser_scanner</topicName>
            <frameName>base_laser_link</frameName>
         </plugin>
