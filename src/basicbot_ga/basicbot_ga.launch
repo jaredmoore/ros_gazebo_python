@@ -40,7 +40,7 @@
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
 <!-- <group ns="basicbot_ga_1"> -->
-<group>
+<group ns="ga1">
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -59,7 +59,7 @@
 
   <!-- Load the URDF into the ROS Parameter Server -->
   <param name="robot_description"
-    command="$(find xacro)/xacro '$(find basicbot_description)/urdf/basicbot.xacro'" />
+    command="$(find xacro)/xacro '$(find basicbot_description)/urdf/basicbot.xacro' robotName:=ga1" />
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
