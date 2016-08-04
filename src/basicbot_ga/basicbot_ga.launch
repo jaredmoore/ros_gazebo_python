@@ -63,7 +63,7 @@
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model basicbot -param robot_description -robot_namespace ga1"/>
+    args="-urdf -model basicbot -param robot_description -robot_namespace ga1 -gazebo_namespace ga1"/>
 </group>
 
 </launch>
