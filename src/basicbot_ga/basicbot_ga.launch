@@ -19,9 +19,9 @@
   <arg name="pub_clock_frequency" default="100"/>
  
   <!-- set use_sim_time flag -->
-  <!-- <group if="$(arg use_sim_time)">
+  <group if="$(arg use_sim_time)">
     <param name="/use_sim_time" value="true" />
-  </group> -->
+  </group>
  
   <!-- set command arguments -->
   <arg unless="$(arg paused)" name="command_arg1" value=""/>
@@ -33,16 +33,14 @@
   <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
   <arg     if="$(arg debug)" name="script_type" value="debug"/>
 
-  <!-- <group if="$(arg use_clock_frequency)">
+  <group if="$(arg use_clock_frequency)">
     <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
-  </group> -->
+  </group>
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
 <!-- <group ns="basicbot_ga_1"> -->
 <group ns="ga1">
-  <param name="/use_sim_time" value="true" />
-  <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
 
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
@@ -66,6 +64,34 @@
 	<node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
 
 	<!-- Load the step world node -->
+  <node name="step_world" pkg="world_step" type="step_world_server"/>
+
+</group>
+
+<group ns="ga2">
+
+  <!-- start gazebo server-->
+  <env name="GAZEBO_MASTER_URI" value="http://localhost:11346"/>
+  <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
+    output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
+    $(arg extra_gazebo_args) $(arg world_name)">
+  </node>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro '$(find basicbot_description)/urdf/basicbot.xacro'" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model basicbot -param robot_description -gazebo_namespace /ga2/gazebo"/>
+
+  <!-- Load the transporter node -->
+  <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
+
+  <!-- Load the turn_drive_scan node -->
+  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
+
+  <!-- Load the step world node -->
   <node name="step_world" pkg="world_step" type="step_world_server"/>
 
 </group>
