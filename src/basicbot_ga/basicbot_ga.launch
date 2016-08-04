@@ -48,6 +48,14 @@
     $(arg extra_gazebo_args) $(arg world_name)">
   </node>
 
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro '$(find basicbot_description)/urdf/basicbot.xacro' robotName:=ga1" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model basicbot -param robot_description -robot_namespace ga1 -gazebo_namespace ga1"/>
+
   <!-- Load the transporter node -->
   <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
 
@@ -57,13 +65,6 @@
 	<!-- Load the step world node -->
   <node name="step_world" pkg="world_step" type="step_world_server"/>
 
-  <!-- Load the URDF into the ROS Parameter Server -->
-  <param name="robot_description"
-    command="$(find xacro)/xacro '$(find basicbot_description)/urdf/basicbot.xacro' robotName:=ga1" />
-
-  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model basicbot -param robot_description -robot_namespace ga1 -gazebo_namespace ga1"/>
 </group>
 
 </launch>
