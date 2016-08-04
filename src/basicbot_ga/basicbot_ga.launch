@@ -43,7 +43,7 @@
 <group ns="ga1">
   <param name="/use_sim_time" value="true" />
   <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
-  
+
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -57,7 +57,7 @@
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model basicbot -param robot_description"/>
+    args="-urdf -model basicbot -param robot_description -gazebo_namespace /ga1/gazebo"/>
 
   <!-- Load the transporter node -->
   <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
