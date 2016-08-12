@@ -23,7 +23,7 @@ class GetLaserScanner(object):
         self.msg = msg
 
         # Correct for infinite values by replacing them with max range.
-        self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum([float("{0:.6f}".format(i) if i != np.inf else msg.range_max for i in msg.ranges]), 'ranges':[float("{0:.6f}".format(i) if i != np.inf else msg.range_max for i in msg.ranges]}
+        self.formatted_msg = {'time':str(msg.header.stamp.secs)+"."+str(msg.header.stamp.nsecs), 'sum_ranges':sum([float("{0:.6f}".format(i)) if i != np.inf else msg.range_max for i in msg.ranges]), 'ranges':[float("{0:.6f}".format(i)) if i != np.inf else msg.range_max for i in msg.ranges]}
 
     def getScanState(self):
         """ Get the current scan information. """
