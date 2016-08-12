@@ -30,13 +30,19 @@ class senderThread(threading.Thread):
             socket: socket to send the data out on.
                 - Persistant throughout execution for now.
         """
-        for i in range(self.num_genomes):
-            ind = {'id':i,'genome':[
+        ind = {'id':i,'genome':[
                     float("{0:.6f}".format(random.random()*10.0)), # center_spin_thresh
                     float("{0:.6f}".format(9.0 + random.random() * 1.0)), # center_drive_thresh
                     float("{0:.6f}".format(random.random()*10.0)), # center_stop_thresh
                     float("{0:.6f}".format(random.random()*10.0)) # stopping_thresh
                 ], 'fitness':-1.0}
+        for i in range(self.num_genomes):
+            # ind = {'id':i,'genome':[
+            #         float("{0:.6f}".format(random.random()*10.0)), # center_spin_thresh
+            #         float("{0:.6f}".format(9.0 + random.random() * 1.0)), # center_drive_thresh
+            #         float("{0:.6f}".format(random.random()*10.0)), # center_stop_thresh
+            #         float("{0:.6f}".format(random.random()*10.0)) # stopping_thresh
+            #     ], 'fitness':-1.0}
             msg = json.dumps(ind)
             print(msg)
             socket.send(msg)
