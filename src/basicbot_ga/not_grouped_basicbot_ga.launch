@@ -33,9 +33,9 @@
   <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
   <arg     if="$(arg debug)" name="script_type" value="debug"/>
 
-  <group if="$(arg use_clock_frequency)">
-    <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
-  </group>
+  <!--<group if="$(arg use_clock_frequency)">-->
+  <!--  <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />-->
+  <!--</group>-->
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
