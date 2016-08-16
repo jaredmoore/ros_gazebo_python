@@ -25,6 +25,9 @@ from world_step import WorldStep
 
 final_time = 0.0
 
+# For tracking robot progression.
+bot_position = []
+
 # Setup the driving messages.
 twist = {}
 twist['forward'] = Twist()
@@ -62,12 +65,26 @@ def update_world(mv_command):
         Returns:
             scan_data: if None, failed state
     """
+    global bot_position
+
     MoveRobot(mv_command)
     ws.stepPhysics(steps=1)
     if checkAtFinalTime():
         return None
     scan_data = scan.getLeftCenterRightScanState()
+
+    # Update Link States for tracking purposes.
+    bot_position.append([getWorldProp().sim_time,ls.getLinkPose('basicbot::base_link').position.x,ls.getLinkPose('basicbot::base_link').position.y])
+
     return scan_data
+
+def log_bot_position(id):
+    """ Log the bot position over time for later log tracking. """
+    global bot_position
+
+    with open("bot_logging.dat","a") as f:
+        for b in bot_position:
+            f.write(str(id)+","+str(b[0])+","+str(b[1])+","+str(b[2]))
 
 ###########################
 
@@ -145,7 +162,7 @@ class Stop(smach.State):
 
 def simCallback(data):
     """ Callback to conduct a simulation. """
-    global final_time, pub
+    global final_time, pub, bot_position
 
     genome_data = rospy.get_param('basicbot_genome')
     print("                 Got genome data of:"+str(genome_data))
@@ -192,6 +209,10 @@ def simCallback(data):
         print(scan.getLeftCenterRightScanState())
     else:
         print("Robot failed to find the cylinder in time.")
+
+    # Log the basicbot position information.
+    log_bot_position()
+    bot_position = []
 
     # Publish the resulting time on the topic.
     pub.publish(current_time)
