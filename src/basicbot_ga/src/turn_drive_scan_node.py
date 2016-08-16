@@ -83,7 +83,7 @@ def log_bot_position(id):
     """ Log the bot position over time for later log tracking. """
     global bot_position
 
-    with open("/scratch/moore112/bot_logging.dat","a") as f:
+    with open("/user/moore112/bot_logging.dat","a") as f:
         for b in bot_position:
             f.write(str(id)+","+str(b[0])+","+str(b[1])+","+str(b[2]))
 
