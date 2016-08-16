@@ -85,7 +85,7 @@ def log_bot_position(id):
 
     with open("/user/moore112/bot_logging.dat","a") as f:
         for b in bot_position:
-            f.write(str(id)+","+str(b[0])+","+str(b[1])+","+str(b[2]))
+            f.write(str(id)+","+str(b[0])+","+str(b[1])+","+str(b[2])+"\n")
 
 ###########################
 
