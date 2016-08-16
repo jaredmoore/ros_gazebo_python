@@ -27,6 +27,7 @@ final_time = 0.0
 
 # For tracking robot progression.
 bot_position = []
+bot_id = 0
 
 # Setup the driving messages.
 twist = {}
@@ -162,7 +163,7 @@ class Stop(smach.State):
 
 def simCallback(data):
     """ Callback to conduct a simulation. """
-    global final_time, pub, bot_position
+    global final_time, pub, bot_position, bot_id
 
     genome_data = rospy.get_param('basicbot_genome')
     print("                 Got genome data of:"+str(genome_data))
@@ -211,7 +212,8 @@ def simCallback(data):
         print("Robot failed to find the cylinder in time.")
 
     # Log the basicbot position information.
-    log_bot_position()
+    log_bot_position(bot_id)
+    bot_id += 1
     bot_position = []
 
     # Publish the resulting time on the topic.
