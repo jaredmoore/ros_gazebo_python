@@ -16,7 +16,7 @@
   <arg name="world_name" value="$(find basicbot_gazebo)/worlds/basicbot.world"/>
   <arg name="respawn_gazebo" default="false"/>
   <arg name="use_clock_frequency" default="false"/>
-  <arg name="pub_clock_frequency" default="1000"/>
+  <arg name="pub_clock_frequency" default="10"/>
  
   <!-- set use_sim_time flag -->
   <group if="$(arg use_sim_time)">
