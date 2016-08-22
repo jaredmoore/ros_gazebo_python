@@ -37,7 +37,7 @@ class senderThread(threading.Thread):
                     float("{0:.6f}".format(random.random()*10.0)) # stopping_thresh
                 ], 'fitness':-1.0}
         for i in range(self.num_genomes):
-            ind['id'] = i
+            ind['id'] = i+50
             # ind = {'id':i,'genome':[
             #         float("{0:.6f}".format(random.random()*10.0)), # center_spin_thresh
             #         float("{0:.6f}".format(9.0 + random.random() * 1.0)), # center_drive_thresh
@@ -63,7 +63,7 @@ _ = raw_input()
 print("Sending tasks to workers")
  
 # How many genomes to test sending
-test_genome_num = 50
+test_genome_num = 150
 
 # Start a thread to send the data.
 sendThread = senderThread(1, socket, num_genomes=test_genome_num)
