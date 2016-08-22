@@ -3,7 +3,7 @@
   <world name="default">
     <physics type="ode">
 	      <max_step_size>0.025</max_step_size>
-        <real_time_update_rate>25</real_time_update_rate>
+        <real_time_update_rate>42</real_time_update_rate>
     </physics>
 
     <include>
