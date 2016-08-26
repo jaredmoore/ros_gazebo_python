@@ -75,17 +75,18 @@ def update_world(mv_command):
     scan_data = scan.getLeftCenterRightScanState()
 
     # Update Link States for tracking purposes.
-    bot_position.append([getWorldProp().sim_time,ls.getLinkPose('basicbot::base_link').position.x,ls.getLinkPose('basicbot::base_link').position.y])
+    #bot_position.append([getWorldProp().sim_time,ls.getLinkPose('basicbot::base_link').position.x,ls.getLinkPose('basicbot::base_link').position.y])
 
     return scan_data
 
 def log_bot_position(id):
     """ Log the bot position over time for later log tracking. """
-    global bot_position
+    pass
+    #global bot_position
 
-    with open("/user/moore112/bot_logging.dat","a") as f:
-        for b in bot_position:
-            f.write(str(id)+","+str(b[0])+","+str(b[1])+","+str(b[2])+"\n")
+    #with open("/user/moore112/bot_logging.dat","a") as f:
+    #    for b in bot_position:
+    #        f.write(str(id)+","+str(b[0])+","+str(b[1])+","+str(b[2])+"\n")
 
 ###########################
 
