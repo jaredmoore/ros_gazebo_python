@@ -47,6 +47,7 @@
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
     args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
     $(arg extra_gazebo_args) $(arg world_name)">
+    <remap from="clock" to="ga1_clock"/>
   </node>
 
   <!-- Load the URDF into the ROS Parameter Server -->
@@ -61,10 +62,12 @@
   <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
 
 	<!-- Load the turn_drive_scan node -->
-	<node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
+	<node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
+   <remap from="clock" to="ga1_clock"/> 
+  </node>
 
 	<!-- Load the step world node -->
-  <node name="step_world" pkg="world_step" type="step_world_server"/>
+  <node name="step_world" pkg="world_step" type="step_world_server"><remap from="clock" to="ga1_clock"/></node>
 
 </group>
 
