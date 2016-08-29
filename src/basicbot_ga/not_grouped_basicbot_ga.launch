@@ -33,14 +33,15 @@
   <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
   <arg     if="$(arg debug)" name="script_type" value="debug"/>
 
-  <!--<group if="$(arg use_clock_frequency)">-->
-  <!--  <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />-->
-  <!--</group>-->
+  <group if="$(arg use_clock_frequency)">
+    <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
+  </group>
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
 
   <!-- start gazebo server-->
+  <remap from="clock" to="ga1_clock"/>
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
     output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
