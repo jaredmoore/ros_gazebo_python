@@ -41,7 +41,7 @@
 
 
   <!-- start gazebo server-->
-  <remap from="/clock" to="/ga1_clock"/>
+  <remap from="/clock" to="ga1_clock"/>
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
     output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
