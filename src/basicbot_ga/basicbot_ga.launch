@@ -33,15 +33,15 @@
   <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
   <arg     if="$(arg debug)" name="script_type" value="debug"/>
 
-  <!--<group if="$(arg use_clock_frequency)">-->
-  <!--  <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />-->
-  <!--</group>-->
+  <group if="$(arg use_clock_frequency)">
+    <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
+  </group>
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
 <!-- <group ns="basicbot_ga_1"> -->
 <group ns="ga1">
-
+  <remap from="clock" to="ga1/clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -69,7 +69,7 @@
 </group>
 
 <group ns="ga2">
-
+  <remap from="clock" to="ga2/clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11346"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -97,7 +97,7 @@
 </group>
 
 <group ns="ga3">
-
+  <remap from="clock" to="ga3/clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11347"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -125,7 +125,7 @@
 </group>
 
 <group ns="ga4">
-
+  <remap from="clock" to="ga4/clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11348"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
