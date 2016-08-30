@@ -47,6 +47,7 @@
     output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
     $(arg extra_gazebo_args) $(arg world_name)">
     <remap from="clock" to="gazeboclock"/>
+    <remap from="laser_scanner" to="gazeboLaser_scanner"/>
   </node>
 
   <!-- Load the transporter node -->
