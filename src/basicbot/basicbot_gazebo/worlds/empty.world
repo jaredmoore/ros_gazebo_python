@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<sdf version="1.4">
+<sdf version="1.5">
   <world name="default">
     <physics type="ode">
 	      <max_step_size>0.025</max_step_size>
@@ -9,15 +9,5 @@
     <include>
       <uri>model://ground_plane</uri>
     </include>
-    <include>
-      <uri>model://sun</uri>
-    </include>
-    
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>-3.23693 -5.55652 3.89026 0 0.279643 1.15619</pose>
-        <view_controller>orbit</view_controller>
-      </camera>
-    </gui>
   </world>
 </sdf>
