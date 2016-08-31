@@ -15,7 +15,8 @@
 
   <!-- start gazebo server-->
   <!--<env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>-->
-    <node name="gazebo" pkg="gazebo_ros" type="gzserver" args="$(arg world) $(arg args)" respawn="false" output="screen">
+  <node name="gazebo" pkg="gazebo_ros" type="gzserver" args="$(arg world) $(arg args)" respawn="false" output="screen">
+    <remap from="rosout" to="rosout_remapped" />  
     <remap from="clock" to="clock_remapped" />
   </node>
 
