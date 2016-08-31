@@ -2,48 +2,25 @@
 
 <!-- ********************* Begin Gazebo Defaults ******************************** -->
 
-<!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="paused" default="true"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="false"/>
-  <arg name="headless" default="true"/>
-  <arg name="debug" default="false"/>
-
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="extra_gazebo_args" default=""/>
+  <arg name="extra_gazebo_args" default="--verbose -r -u"/>
   <arg name="physics" default="ode"/>
-  <arg name="verbose" default="true"/>
   <arg name="world_name" value="$(find basicbot_gazebo)/worlds/empty.world"/>
-  <arg name="respawn_gazebo" default="false"/>
-  <arg name="use_clock_frequency" default="false"/>
-  <arg name="pub_clock_frequency" default="100"/>
  
   <!-- set use_sim_time flag -->
-  <group if="$(arg use_sim_time)">
-    <param name="/use_sim_time" value="true" />
-  </group>
- 
-  <!-- set command arguments -->
-  <arg unless="$(arg paused)" name="command_arg1" value=""/>
-  <arg     if="$(arg paused)" name="command_arg1" value="-u"/>
-  <arg unless="$(arg headless)" name="command_arg2" value=""/>
-  <arg     if="$(arg headless)" name="command_arg2" value="-r"/>
-  <arg unless="$(arg verbose)" name="command_arg3" value=""/>
-  <arg     if="$(arg verbose)" name="command_arg3" value="--verbose"/>
+  <param name="/use_sim_time" value="true" />
 
-  <group if="$(arg use_clock_frequency)">
-    <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
-  </group>
+
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
 
 
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
-  <node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="$(arg respawn_gazebo)" 
-    output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
+  <node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" 
+    output="screen" args="$(arg command_arg1) -e $(arg physics) 
     $(arg extra_gazebo_args) $(arg world_name)">
-    <remap from="clock" to="ga1_clock"/>
+    <remap from="clock" to="clock_remapped"/>
   </node>
 
 </launch>
