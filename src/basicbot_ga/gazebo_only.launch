@@ -3,12 +3,11 @@
 <!-- ********************* Begin Gazebo Defaults ******************************** -->
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="args" default="--verbose -r -u -e ode"/>
+  <arg name="args" default="--verbose -r -e ode"/>
   <arg name="world" value="$(find basicbot_gazebo)/worlds/empty.world"/>
  
   <!-- set use_sim_time flag -->
-  <param name="/use_sim_time" value="true" />
-
+  <!--<param name="/use_sim_time" value="true" />-->
 
 
 <!-- ********************* End Gazebo Defaults ******************************** -->    
