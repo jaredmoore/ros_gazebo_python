@@ -13,7 +13,7 @@
   <arg name="extra_gazebo_args" default=""/>
   <arg name="physics" default="ode"/>
   <arg name="verbose" default="true"/>
-  <arg name="world_name" value="$(find basicbot_gazebo)/worlds/basicbot.world"/>
+  <arg name="world_name" value="$(find basicbot_gazebo)/worlds/empty.world"/>
   <arg name="respawn_gazebo" default="false"/>
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
