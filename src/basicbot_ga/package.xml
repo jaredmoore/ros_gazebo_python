@@ -16,6 +16,8 @@
   <author email="moorejar@gvsu.edu">Jared Moore</author>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>smach</build_depend>
+   <run_depend>smach</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

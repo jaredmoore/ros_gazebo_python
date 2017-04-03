@@ -1,0 +1,147 @@
+simongle@simongle-XPS-13-V14:~/simulation/ros_gazebo_python/src/basicbot_ga$ roslaunch basicbot_ga basicbot_ga.launch 
+... logging to /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/roslaunch-simongle-XPS-13-V14-3777.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+
+started roslaunch server http://simongle-XPS-13-V14:36654/
+
+SUMMARY
+========
+
+PARAMETERS
+ * /ga1/robot_description: <?xml version="1....
+ * /ga2/robot_description: <?xml version="1....
+ * /ga3/robot_description: <?xml version="1....
+ * /ga4/robot_description: <?xml version="1....
+ * /rosdistro: indigo
+ * /rosversion: 1.11.20
+ * /use_sim_time: True
+
+NODES
+  /ga3/
+    basicbot_transporter (basicbot_ga/basicbot_transporter.py)
+    gazebo (gazebo_ros/gzserver)
+    step_world (world_step/step_world_server)
+    turn_drive_scan (basicbot_ga/turn_drive_scan_node.py)
+    urdf_spawner (gazebo_ros/spawn_model)
+  /ga4/
+    basicbot_transporter (basicbot_ga/basicbot_transporter.py)
+    gazebo (gazebo_ros/gzserver)
+    step_world (world_step/step_world_server)
+    turn_drive_scan (basicbot_ga/turn_drive_scan_node.py)
+    urdf_spawner (gazebo_ros/spawn_model)
+  /ga1/
+    basicbot_transporter (basicbot_ga/basicbot_transporter.py)
+    gazebo (gazebo_ros/gzserver)
+    step_world (world_step/step_world_server)
+    turn_drive_scan (basicbot_ga/turn_drive_scan_node.py)
+    urdf_spawner (gazebo_ros/spawn_model)
+  /ga2/
+    basicbot_transporter (basicbot_ga/basicbot_transporter.py)
+    gazebo (gazebo_ros/gzserver)
+    step_world (world_step/step_world_server)
+    turn_drive_scan (basicbot_ga/turn_drive_scan_node.py)
+    urdf_spawner (gazebo_ros/spawn_model)
+
+auto-starting new master
+process[master]: started with pid [3801]
+ROS_MASTER_URI=http://localhost:11311
+
+setting /run_id to 61d410fa-0f5d-11e7-a548-9cb6d0da1e73
+process[rosout-1]: started with pid [3814]
+started core service [/rosout]
+process[ga1/gazebo-2]: started with pid [3827]
+process[ga1/urdf_spawner-3]: started with pid [3842]
+process[ga1/basicbot_transporter-4]: started with pid [3843]
+process[ga1/turn_drive_scan-5]: started with pid [3844]
+process[ga1/step_world-6]: started with pid [3845]
+process[ga2/gazebo-7]: started with pid [3848]
+process[ga2/urdf_spawner-8]: started with pid [3852]
+process[ga2/basicbot_transporter-9]: started with pid [3853]
+process[ga2/turn_drive_scan-10]: started with pid [3854]
+process[ga2/step_world-11]: started with pid [3856]
+process[ga3/gazebo-12]: started with pid [3866]
+process[ga3/urdf_spawner-13]: started with pid [3871]
+process[ga3/basicbot_transporter-14]: started with pid [3884]
+process[ga3/turn_drive_scan-15]: started with pid [3887]
+process[ga3/step_world-16]: started with pid [3888]
+process[ga4/gazebo-17]: started with pid [3890]
+process[ga4/urdf_spawner-18]: started with pid [3895]
+process[ga4/basicbot_transporter-19]: started with pid [3896]
+process[ga4/turn_drive_scan-20]: started with pid [3916]
+process[ga4/step_world-21]: started with pid [3919]
+Gazebo multi-robot simulator, version 7.5.0
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+Gazebo multi-robot simulator, version 7.5.0
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+spawn_model script started
+Traceback (most recent call last):
+  File "/home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py", line 94, in <module>
+    import smach_ros
+ImportError: No module named smach_ros
+Gazebo multi-robot simulator, version 7.5.0
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+Traceback (most recent call last):
+  File "/home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py", line 94, in <module>
+    import smach_ros
+ImportError: No module named smach_ros
+[INFO] [WallTime: 1490227942.715762] [0.000000] Loading model xml from ros parameter
+[INFO] [WallTime: 1490227942.720367] [0.000000] Waiting for service /ga1/gazebo/spawn_urdf_model
+spawn_model script started
+Gazebo multi-robot simulator, version 7.5.0
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+spawn_model script started
+Traceback (most recent call last):
+  File "/home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py", line 94, in <module>
+    import smach_ros
+ImportError: No module named smach_ros
+[ga1/turn_drive_scan-5] process has died [pid 3844, exit code 1, cmd /home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py clock:=ga1_clock __name:=turn_drive_scan __log:=/home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga1-turn_drive_scan-5.log].
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga1-turn_drive_scan-5*.log
+[ga2/turn_drive_scan-10] process has died [pid 3854, exit code 1, cmd /home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py clock:=ga2_clock __name:=turn_drive_scan __log:=/home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga2-turn_drive_scan-10.log].
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga2-turn_drive_scan-10*.log
+Traceback (most recent call last):
+  File "/home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py", line 94, in <module>
+    import smach_ros
+ImportError: No module named smach_ros
+spawn_model script started
+[INFO] [WallTime: 1490227942.991522] [0.000000] Loading model xml from ros parameter
+[INFO] [WallTime: 1490227942.996643] [0.000000] Waiting for service /ga2/gazebo/spawn_urdf_model
+[INFO] [WallTime: 1490227943.001743] [0.000000] Loading model xml from ros parameter
+[INFO] [WallTime: 1490227943.006304] [0.000000] Waiting for service /ga3/gazebo/spawn_urdf_model
+[INFO] [WallTime: 1490227943.020678] [0.000000] Loading model xml from ros parameter
+[INFO] [WallTime: 1490227943.023141] [0.000000] Waiting for service /ga4/gazebo/spawn_urdf_model
+[ga3/turn_drive_scan-15] process has died [pid 3887, exit code 1, cmd /home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py clock:=ga3_clock __name:=turn_drive_scan __log:=/home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga3-turn_drive_scan-15.log].
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga3-turn_drive_scan-15*.log
+[ga4/turn_drive_scan-20] process has died [pid 3916, exit code 1, cmd /home/simongle/simulation/ros_gazebo_python/src/basicbot_ga/src/turn_drive_scan_node.py clock:=ga4_clock __name:=turn_drive_scan __log:=/home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga4-turn_drive_scan-20.log].
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga4-turn_drive_scan-20*.log
+[INFO] [WallTime: 1490227943.905028] [0.000000] Calling service /ga2/gazebo/spawn_urdf_model
+[INFO] [WallTime: 1490227943.922004] [0.000000] Calling service /ga3/gazebo/spawn_urdf_model
+[INFO] [WallTime: 1490227943.943584] [0.000000] Calling service /ga4/gazebo/spawn_urdf_model
+[INFO] [WallTime: 1490227943.947145] [0.000000] Calling service /ga1/gazebo/spawn_urdf_model
+[INFO] [WallTime: 1490227944.073812] [0.000000] Spawn status: SpawnModel: Successfully spawned model
+[INFO] [WallTime: 1490227944.083926] [0.000000] Spawn status: SpawnModel: Successfully spawned model
+[INFO] [WallTime: 1490227944.118547] [0.000000] Spawn status: SpawnModel: Successfully spawned model
+[INFO] [WallTime: 1490227944.164860] [0.000000] Spawn status: SpawnModel: Successfully spawned model
+[ga3/urdf_spawner-13] process has finished cleanly
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga3-urdf_spawner-13*.log
+[ga1/urdf_spawner-3] process has finished cleanly
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga1-urdf_spawner-3*.log
+[ga4/urdf_spawner-18] process has finished cleanly
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga4-urdf_spawner-18*.log
+[ga2/urdf_spawner-8] process has finished cleanly
+log file: /home/simongle/.ros/log/61d410fa-0f5d-11e7-a548-9cb6d0da1e73/ga2-urdf_spawner-8*.log
+
+
