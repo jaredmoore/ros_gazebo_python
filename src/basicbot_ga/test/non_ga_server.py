@@ -63,7 +63,7 @@ _ = raw_input()
 print("Sending tasks to workers")
  
 # How many genomes to test sending
-test_genome_num = 150
+test_genome_num = 10
 
 # Start a thread to send the data.
 sendThread = senderThread(1, socket, num_genomes=test_genome_num)
@@ -73,7 +73,7 @@ sendThread.start()
 i = test_genome_num
 while i > 0:
     data = json.loads(receiver.recv())
-    print(data['fitness'],data['id'])
+    print("Fitness: {}, Genome ID: {}, Namespace: {}".format(data['fitness'],data['id'],data['ns']))
     i -= 1
  
 # Wait for the send thread to complete.

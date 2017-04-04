@@ -45,7 +45,6 @@ while True:
         pass
 
     # Transmit the result back to the external source
-
     msg = json.dumps({'id':data['id'],'fitness':basicbot_scan_result, 'ns':rospy.get_namespace(), 'name':rospy.get_name()})
     sender.send(msg)
     print (rospy.get_namespace(), basicbot_scan_result)
