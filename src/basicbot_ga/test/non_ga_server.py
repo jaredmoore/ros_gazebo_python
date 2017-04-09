@@ -63,7 +63,7 @@ _ = raw_input()
 print("Sending tasks to workers")
  
 # How many genomes to test sending
-test_genome_num = 150
+test_genome_num = 20
 
 # Start a thread to send the data.
 sendThread = senderThread(1, socket, num_genomes=test_genome_num)
