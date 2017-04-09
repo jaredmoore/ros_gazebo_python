@@ -1,7 +1,7 @@
 <launch>
   <arg name="paused" default="true"/>
   <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
+  <arg name="gui" default="false"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
   <arg name="world_name" default="$(find firstbot_gazebo)/worlds/firstbot_world.world"/> 
