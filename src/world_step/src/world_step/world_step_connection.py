@@ -9,7 +9,11 @@ class WorldStep(object):
         # Wait for the StepWorld node to start.
         rospy.wait_for_service('step_world')
         self.step = rospy.ServiceProxy('step_world',step_world)
+        self.Reset = rospy.ServiceProxy('reset_world',step_world)
     
     def stepPhysics(self,steps=1):
         """ Step the simulation. """
         self.step()
+        
+    def Reset(self):
+		self.reset()

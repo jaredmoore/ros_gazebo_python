@@ -19,6 +19,7 @@ class senderThread(threading.Thread):
         self.num_genomes = num_genomes
  
     def run(self):
+        print("Gnome - center_spin_thresh, center_drive_thresh, center_stop_thresh, stopping_thresh")
         print("\t\t\t\tStarting Sender Thread:"+str(self.threadID))
         self.send_data()
         print("\t\t\t\tExiting Sender Thread:"+str(self.threadID))
@@ -30,11 +31,17 @@ class senderThread(threading.Thread):
             socket: socket to send the data out on.
                 - Persistant throughout execution for now.
         """
+        #ind = {'id':0,'genome':[
+        #            float("{0:.6f}".format(random.random()*10.0)), # center_spin_thresh
+        #            float("{0:.6f}".format(9.0 + random.random() * 1.0)), # center_drive_thresh
+        #            float("{0:.6f}".format(random.random()*10.0)), # center_stop_thresh
+        #            float("{0:.6f}".format(random.random()*10.0)) # stopping_thresh
+        #        ], 'fitness':-1.0}
         ind = {'id':0,'genome':[
-                    float("{0:.6f}".format(random.random()*10.0)), # center_spin_thresh
-                    float("{0:.6f}".format(9.0 + random.random() * 1.0)), # center_drive_thresh
-                    float("{0:.6f}".format(random.random()*10.0)), # center_stop_thresh
-                    float("{0:.6f}".format(random.random()*10.0)) # stopping_thresh
+                    float("{0:.6f}".format(5.7)), # center_spin_thresh
+                    float("{0:.6f}".format(9.4)), # center_drive_thresh
+                    float("{0:.6f}".format(5.8)), # center_stop_thresh
+                    float("{0:.6f}".format(2.06)) # stopping_thresh
                 ], 'fitness':-1.0}
         for i in range(self.num_genomes):
             ind['id'] = i+50
@@ -79,6 +86,9 @@ while i > 0:
 # Wait for the send thread to complete.
 sendThread.join()
  
-print("Closing Socket")
+print("Closing Socket..")
 socket.close()
 receiver.close()
+print("...Closed!")
+print("Press Enter to close script: ")
+_ = raw_input()

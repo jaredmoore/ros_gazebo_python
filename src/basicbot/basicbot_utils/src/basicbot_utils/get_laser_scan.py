@@ -13,6 +13,8 @@ class GetLaserScanner(object):
     """
 
     def __init__(self):
+        #ns = rospy.get_namespace()
+        #rospy.Subscriber(ns+'/laser_scanner', LaserScan, self.lsCallback)
         rospy.Subscriber('/laser_scanner', LaserScan, self.lsCallback)
 
         self.msg = ""

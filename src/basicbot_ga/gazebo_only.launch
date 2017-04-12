@@ -17,6 +17,7 @@
   <arg name="respawn_gazebo" default="false"/>
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
+  <arg name="seed" default="0"/>
  
   <!-- set use_sim_time flag -->
   <group if="$(arg use_sim_time)">
@@ -44,7 +45,9 @@
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
     args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
-    $(arg extra_gazebo_args) $(arg world_name)">
+    $(arg extra_gazebo_args) $(arg world_name) $(arg seed)">
+    <!-- <remap from="clock" to="ga1_clock"/> -->
+    <!-- <remap from="laser_scanner" to="ga1/laser_scanner"/> -->
   </node>
 
   <!-- Load the URDF into the ROS Parameter Server -->

@@ -220,6 +220,7 @@ def simCallback(data):
     # Publish the resulting time on the topic.
     pub.publish(current_time)
 
+    #ws.Reset()
     resetWorld()
     resetSimulation()
 
@@ -239,6 +240,7 @@ rospy.wait_for_service(ns+'/gazebo/unpause_physics')
 getWorldProp = rospy.ServiceProxy(ns+'/gazebo/get_world_properties', GetWorldProperties)
 resetWorld = rospy.ServiceProxy(ns+'/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy(ns+'/gazebo/reset_simulation', Empty)
+
 
 # Setup the WorldStep service object
 ws = WorldStep()

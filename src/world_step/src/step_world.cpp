@@ -33,6 +33,7 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   // Publish the step message for the simulation.
   gazebo::msgs::WorldControl msg;
   msg.set_step(1);
+  
   pub->Publish(msg);
 
   // cv.wait(lck);
@@ -45,6 +46,13 @@ bool step(world_step::step_world::Request& request, world_step::step_world::Resp
   response.stepped = true;
   
   return true;
+}
+
+bool reset(world_step::step_world::Request& request, world_step::step_world::Response& response) {
+	gazebo::msgs::WorldControl msg;
+	msg.set_seed(0);
+	pub1->Publish(msg);
+	return true;
 }
 
 int main(int argc, char** argv)
@@ -64,6 +72,21 @@ int main(int argc, char** argv)
 
   // Advertise the service as ready.
   ros::ServiceServer service = n.advertiseService("step_world", step);
+  
+  
+  
+  
+  
+  
+  
+  ros::NodeHandle m;
+  gazebo::transport::NodePtr node1(new gazebo::transport::Node());
+  node1->Init();
+
+  pub1 = node1->Advertise<gazebo::msgs::WorldControl>("~/world_control");
+  ros::ServiceServer service1 = m.advertiseService("reset_world", reset);
+  
+  
  
   ros::spin();
 
