@@ -7,6 +7,16 @@
   <arg name="headless" default="true"/>
   <arg name="debug" default="false"/>
   <arg name="verbose" default="false"/>
+  <arg name="physics" default="ode"/>
+  <arg name="extra_gazebo_args" default=""/>
+  <arg name="world_name" value="$(find basicbot_gazebo)/worlds/basicbot.world"/>
+  <arg name="respawn_gazebo" default="false"/>
+  <arg name="use_clock_frequency" default="false"/>
+  <arg name="pub_clock_frequency" default="100"/>
+
+  <group if="$(arg use_sim_time)">
+    <param name="/use_sim_time" value="true" />
+  </group>
 
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
