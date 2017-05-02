@@ -232,14 +232,14 @@ rospy.init_node('wander', log_level=rospy.WARN)
 ls = GetLinkStates()
 scan = GetLaserScanner()
 
-for i in range(5):
+genome = {
+    'center_spin_thresh': random.random()*10.0,
+    'center_drive_thresh': 9.0 + random.random() * 1.0,
+    'center_stop_thresh': random.random() * 10.0,
+    'stopping_thresh': random.random() * 10.0
+}
 
-    genome = {
-        'center_spin_thresh': random.random()*10.0,
-        'center_drive_thresh': 9.0 + random.random() * 1.0,
-        'center_stop_thresh': random.random() * 10.0,
-        'stopping_thresh': random.random() * 10.0
-    }
+for i in range(5):
 
     sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
