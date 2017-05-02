@@ -276,6 +276,7 @@ for i in range(5):
         print(scan.getLeftCenterRightScanState())
     else:
         print("Robot failed to find the cylinder in time.")
+        print(scan.getLeftCenterRightScanState())
 
     resetWorld()
     resetSimulation()
