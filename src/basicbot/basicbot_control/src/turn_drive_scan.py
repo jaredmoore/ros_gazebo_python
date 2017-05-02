@@ -279,4 +279,4 @@ for i in range(5):
         print(scan.getLeftCenterRightScanState())
 
     resetWorld()
-    resetSimulation()
+    #resetSimulation()
