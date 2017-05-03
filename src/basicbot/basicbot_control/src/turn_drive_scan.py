@@ -278,5 +278,7 @@ for i in range(5):
         print("Robot failed to find the cylinder in time.")
         print(scan.getLeftCenterRightScanState())
 
+    print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))    
+
     resetWorld()
-    #resetSimulation()
+    resetSimulation()
