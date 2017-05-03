@@ -110,4 +110,4 @@ for i in range(10):
     print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
 
     resetWorld()
-    #resetSimulation()
+    resetSimulation()
