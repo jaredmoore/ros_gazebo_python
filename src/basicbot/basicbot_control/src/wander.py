@@ -91,6 +91,13 @@ for i in range(10):
     current_time = getWorldProp().sim_time 
     final_time = getWorldProp().sim_time + 20.0
     print("Final Time: "+str(final_time)+", Current Time: "+str(current_time))
+    
+    # Add a delay time to perhaps flush sensor data?
+    cmd_vel_pub.publish(wander_twist)
+    ws.stepPhysics(steps=1)
+    ws.stepPhysics(steps=1)
+    ws.stepPhysics(steps=1)
+    ws.stepPhysics(steps=1)
     ws.stepPhysics(steps=1)
     
     while not rospy.is_shutdown():
