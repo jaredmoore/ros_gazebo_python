@@ -273,11 +273,11 @@ for i in range(5):
     print("Current Time: "+str(current_time))
 
     if outcome == 'succeeded':
-        print(scan.getLeftCenterRightScanState())
+        print("Success!!!!!")
     else:
         print("Robot failed to find the cylinder in time.")
-        print(scan.getLeftCenterRightScanState())
 
+    print(scan.getLeftCenterRightScanState())
     print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))    
 
     resetWorld()
