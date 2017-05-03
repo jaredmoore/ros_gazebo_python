@@ -103,7 +103,7 @@ for i in range(10):
             driving_forward = not driving_forward
             turn_twist.angular.z = turn_twist.angular.z# * random.choice([-1,1])
             state_change_time = getWorldProp().sim_time + 2.5 
-            print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
+            #print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
         if final_time <= getWorldProp().sim_time:
             break
     
