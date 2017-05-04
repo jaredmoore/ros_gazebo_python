@@ -186,8 +186,8 @@ def simCallback(data):
     print("Starting an individual simulation.")
     print(genome)
     print(scan.getLeftCenterRightScanState())
-        print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
-        print("--------------------------")
+    print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
+    print("--------------------------")
 
     with sm:
             smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
