@@ -30,8 +30,8 @@
   <arg     if="$(arg headless)" name="command_arg2" value="-r"/>
   <arg unless="$(arg verbose)" name="command_arg3" value=""/>
   <arg     if="$(arg verbose)" name="command_arg3" value="--verbose"/>
-  <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
-  <arg     if="$(arg debug)" name="script_type" value="debug"/>
+  <arg unless="$(arg debug)" name="type" value="gzserver"/>
+  <arg     if="$(arg debug)" name="type" value="debug"/>
 
   <group if="$(arg use_clock_frequency)">
     <param name="gazebo/pub_clock_frequency" value="$(arg pub_clock_frequency)" />
@@ -43,7 +43,7 @@
   <!-- start gazebo server-->
   <remap from="/clock" to="ga1_clock"/>
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
-  <node name="gazebo" pkg="gazebo_ros" respawn="$(arg respawn_gazebo)" 
+  <node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="$(arg respawn_gazebo)" 
     output="screen" args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
     $(arg extra_gazebo_args) $(arg world_name)">
     <remap from="clock" to="gazeboclock"/>
