@@ -182,7 +182,12 @@ def simCallback(data):
     ws.stepPhysics(steps=1)
     current_time = getWorldProp().sim_time 
     final_time = getWorldProp().sim_time + 100.0
+
+    print("Starting an individual simulation.")
     print(genome)
+    print(scan.getLeftCenterRightScanState())
+        print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
+        print("--------------------------")
 
     with sm:
             smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
@@ -208,7 +213,10 @@ def simCallback(data):
     print("Current Time: "+str(current_time))
 
     if outcome == 'succeeded':
+        print("Ending a simulation:")
         print(scan.getLeftCenterRightScanState())
+        print(str(getWorldProp().sim_time)+","+str(ls.getLinkPose('basicbot::base_link').position.x)+","+str(ls.getLinkPose('basicbot::base_link').position.y))
+        print("--------------------------")
     else:
         print("Robot failed to find the cylinder in time.")
 
