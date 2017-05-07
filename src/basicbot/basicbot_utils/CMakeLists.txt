@@ -4,6 +4,7 @@ project(basicbot_utils)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   gazebo_ros
+  gazebo_msgs
   message_generation
 )
 
