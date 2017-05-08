@@ -85,7 +85,7 @@ def simCallback(data):
     pub.publish(current_time)
 
     resetWorld()
-    resetSimulation()
+    #resetSimulation()
 
 ###########################
 
