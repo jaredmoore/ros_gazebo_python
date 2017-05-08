@@ -111,7 +111,7 @@ ws = WorldStep()
 cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
 
 # Initialize the node.
-rospy.init_node('turn_drive_scan_node', log_level=rospy.WARN, anonymous=True)
+rospy.init_node('drive_node', log_level=rospy.WARN, anonymous=True)
 
 # Setup the topic subscribers for getting the state of the robot and sensors.
 ls = GetLinkStates()
