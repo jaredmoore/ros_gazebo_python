@@ -54,11 +54,11 @@
   </node>
 
 	<!-- Load the turn_drive_scan node -->
-	<!-- <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
-  </node> -->
-
-  <node name="drive" pkg="basicbot_ga" type="drive_node.py" output="screen">
+	<node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
   </node>
+
+<!--   <node name="drive" pkg="basicbot_ga" type="drive_node.py" output="screen">
+  </node> -->
 
 	<!-- Load the step world node -->
   <node name="step_world" pkg="world_step" type="step_world_server">
