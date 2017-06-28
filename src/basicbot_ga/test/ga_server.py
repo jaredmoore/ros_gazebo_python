@@ -142,7 +142,7 @@ pop = toolbox.population(n=args.pop_size)
 
 for p in pop:
     print(p[0],p[1],p[2],p[3])
-    print(p.fitness.values)
+    print(p.fitness)
 
 # # Run the first set of evaluations.
 # fitnesses = toolbox.map(toolbox.evaluate, pop)
