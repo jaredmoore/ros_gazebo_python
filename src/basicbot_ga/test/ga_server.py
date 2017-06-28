@@ -141,7 +141,8 @@ pop = toolbox.population(n=args.pop_size)
 # history.update(pop)
 
 for p in pop:
-    print(p)
+    print(p[0],p[1],p[2],p[3])
+    print(p.fitness.values)
 
 # # Run the first set of evaluations.
 # fitnesses = toolbox.map(toolbox.evaluate, pop)
