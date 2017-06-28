@@ -41,13 +41,12 @@
 
 <!-- <group ns="basicbot_ga_1"> -->
 <group ns="ga1">
-  <remap from="clock" to="ga1_clock"/>
+  <remap from="/clock" to="/ga1_clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
     args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) 
     $(arg extra_gazebo_args) $(arg world_name)">
-    <remap from="clock" to="ga1_clock"/>
   </node>
 
   <!-- Load the URDF into the ROS Parameter Server -->
@@ -72,7 +71,7 @@
 </group>
 
 <group ns="ga2">
-  <remap from="clock" to="ga2_clock"/>
+  <remap from="/clock" to="/ga2_clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11346"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -100,7 +99,7 @@
 </group>
 
 <group ns="ga3">
-  <remap from="clock" to="ga3_clock"/>
+  <remap from="/clock" to="/ga3_clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11347"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -128,7 +127,7 @@
 </group>
 
 <group ns="ga4">
-  <remap from="clock" to="ga4_clock"/>
+  <remap from="/clock" to="/ga4_clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11348"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
