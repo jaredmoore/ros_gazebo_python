@@ -143,7 +143,7 @@ pop = toolbox.population(n=args.pop_size)
 for p in pop:
     print(p[0],p[1],p[2],p[3])
 
-    p.fitness = random.random()
+    p.fitness.values = (random.random(),)
     print(p.fitness)
 
 # # Run the first set of evaluations.
