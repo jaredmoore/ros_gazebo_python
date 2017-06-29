@@ -3,15 +3,38 @@
 """
  
 import argparse
-# import json
-# import zmq
- 
+import json
+import zmq
 import random
-#import threading
+import threading
  
 from deap import base
 from deap import creator
 from deap import tools
+
+class senderThread(threading.Thread):
+    def __init__(self, threadID, socket, population):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.socket = socket
+        self.population = population
+ 
+    def run(self):
+        print("\t\t\t\tStarting Sender Thread:"+str(self.threadID))
+        self.send_data()
+        print("\t\t\t\tExiting Sender Thread:"+str(self.threadID))
+ 
+    def send_data(self):
+        """ Send data to worker processes. 
+ 
+        Args:
+            socket: socket to send the data out on.
+                - Persistant throughout execution for now.
+        """
+        for ind in self.population:
+            ind_pkt = {'id':ind['id'],'genome':ind['genome'], 'fitness':-1.0}
+            msg = json.dumps(ind_pkt)
+            socket.send(msg)
 
 # Process inputs.
 parser = argparse.ArgumentParser()
@@ -25,28 +48,18 @@ args = parser.parse_args()
 # Initialize the random number seed.
 random.seed(args.run_num)
  
-# # Setup the socket to send genome data out on.
-# context = zmq.Context()
-# socket = context.socket(zmq.PUSH)
-# socket.bind('tcp://127.0.0.1:5000')
-
-# # Setup the socket to send genomes to the distributer thread on.
-# # genome_context = zmq.Context()
-# # genome_socket = genome_context.socket(zmq.PUSH)
-# # genome_socket.bind('tcp://127.0.0.1:5005')
+# Setup the socket to send genome data out on.
+context = zmq.Context()
+socket = context.socket(zmq.PUSH)
+socket.bind('tcp://127.0.0.1:5000')
  
-# # Setup the socket to read the responses on.
-# receiver = context.socket(zmq.PULL)
-# receiver.bind('tcp://127.0.0.1:5010')
+# Setup the socket to read the responses on.
+receiver = context.socket(zmq.PULL)
+receiver.bind('tcp://127.0.0.1:5010')
  
-# print("Press Enter when the workers are ready: ")
-# _ = raw_input()
-# print("Sending tasks to workers")
-
-
-
-
-
+print("Press Enter when the workers are ready: ")
+_ = raw_input()
+print("Sending tasks to workers")
 
 def format_float(value):
     """ Return a formatted float value capable of being printed. """
@@ -55,6 +68,16 @@ def format_float(value):
 def init_gene():
     """ Initialize a gene in the range of 0 to 10. """
     return format_float(random.random()*10.0)
+
+def init_individual():
+    """ Initialize an individual. """
+    return {'id':0,'genome':[
+                init_gene(), # center_spin_thresh
+                init_gene(), # center_drive_thresh
+                init_gene(), # center_stop_thresh
+                init_gene() # stopping_thresh
+            ], 
+            'fitness':-1.0}
 
 
 def mutate_value(value,low_lim,upp_lim):
@@ -85,7 +108,38 @@ def mutate(individual, mut_prob=0.04):
             individual[i] = mutate_value(individual[i],0.0,10.0)
 
     return (individual,)
- 
+
+def evaluate_population(population, gen):
+    """ Evaluate a population and set fitnesses appropriately.
+
+    Args:
+        population: list of individuals
+        gen: generation being conducted
+    Returns:
+        list of population.
+    """
+    # Start a thread to send the data.
+    sendThread = senderThread(1, socket, population)
+    sendThread.start()
+     
+    # Read the responses on the receiver socket.
+    i = len(population)
+    while i > 0:
+        data = json.loads(receiver.recv())
+        print(data['fitness'],data['id'])
+        population[get_index_of_ind(population,data['id'])]['fitness'] = data['fitness']
+        i -= 1
+     
+    # Wait for the send thread to complete.
+    sendThread.join()
+
+    return population
+
+def get_index_of_ind(population, ind_id):
+    """ Get the index of the individual in the population. """
+    for i,ind in enumerate(population):
+        if ind['id'] == ind_id:
+            return i
 
 # Establish name of the output files and write appropriate headers.
 out_fit_file = args.output_path+str(args.run_num)+"_fitnesses.dat"
@@ -109,9 +163,8 @@ history = tools.History()
 toolbox.register("attr_gene",init_gene)
 
 # Initialize the genome for the individual.
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_gene, 4)
+toolbox.register("individual", init_individual)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
 
 toolbox.register("mutate", mutate)
 toolbox.register("mate", tools.cxTwoPoint)
@@ -122,10 +175,6 @@ toolbox.decorate("mutate", history.decorator)
 
 # Create a population as a list.
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-# Register the evaluation function.
-# TODO: Redo evaluation function.
-# toolbox.register("evaluate", evaluate_individual)
 
 # Register the selection function.
 toolbox.register("select", tools.selTournament, tournsize=2)
@@ -140,120 +189,53 @@ cxpb, mutpb = 0.5, 0.05
 pop = toolbox.population(n=args.pop_size)
 # history.update(pop)
 
+# Can conduct evaluations this way.
 for p in pop:
-    print(p[0],p[1],p[2],p[3])
+    print(p['id'],": ",p['genome'][0],p['genome'][1],p['genome'][2],['genome']p[3])
 
-    p.fitness.values = (random.random(),)
+    p['fitness'] = (random.random(),)
     print(p.fitness)
 
-# # Run the first set of evaluations.
-# fitnesses = toolbox.map(toolbox.evaluate, pop)
-# for ind, fit in zip(pop, fitnesses):
-#     ind.fitness.values = fit
+pop = evaluate_population(pop,0)
 
 # # Log the progress of the population. (For Generation 0)
 # writeGeneration(out_fit_file,0,pop)
 
-# # writeTimeInformationHeaders(out_time_file)
+for g in range(1,args.gens):
 
-# for g in range(1,args.gens):
-#     # select_time = time.time()
-#     # Pull out the elite individual to save for later.
-#     elite = tools.selBest(pop, k=1)
+    # Pull out the elite individual to save for later.
+    elite = tools.selBest(pop, k=1)
 
-#     pop = toolbox.select(pop, k=len(pop)-1)
-#     pop = [toolbox.clone(ind) for ind in pop]
-#     # select_time = time.time() - select_time
+    offspring = toolbox.select(pop, k=len(pop)-1)
+    offspring = list(map(toolbox.clone, offspring))
 
-#     # Update the Hall of Fame
-#     #hof.update(pop)
+    # Update the Hall of Fame
+    #hof.update(pop)
 
-#     # id_time = time.time()
-#     # Request new id's for the population.
-#     for ind in pop:
-#         ind.get_new_id()
-#     # id_time = time.time() - id_time
+    for child1, child2 in zip(offspring[::2], offspring[1::2]):
+        if random.random() < CXPB:
+            toolbox.mate(child1, child2)
+            del child1.fitness.values
+            del child2.fitness.values
 
+    for mutant in offspring:
+        if random.random() < MUTPB:
+            toolbox.mutate(mutant)
+            del mutant.fitness.values
 
-#     # cross_time = time.time()
-#     for child1, child2 in zip(pop[::2], pop[1::2]):
-#         if random.random() < cxpb:
-#             # Must serialize and deserialize due to the type of object.
-#             # child1_serialized, child2_serialized = toolbox.mate(child1.serialize(), child2.serialize())
-#             child1, child2 = toolbox.mate(child1, child2)
-#             #child1.deserialize(child1_serialized)
-#             #child2.deserialize(child2_serialized)
-#             del child1.fitness.values, child2.fitness.values
-#     # cross_time = time.time() - cross_time
+    pop[:] = offspring
 
-#     # mut_time = time.time()
-#     #for mutant in pop:
-#     #    toolbox.mutate(mutant)
-#     #    del mutant.fitness.values
-#     for i in range(len(pop)):
-#     #for ind in pop:
-#        pop[i] = toolbox.mutate(pop[i])[0]
-#        del pop[i].fitness.values
-#     # mut_time = time.time() - mut_time
+    # Request new id's for the population.
+    for i in range(len(pop)):
+        pop[i]['id'] += len(pop)
 
-#     # eval_time = time.time()
-#     invalids = [ind for ind in pop if not ind.fitness.valid]
-#     fitnesses = toolbox.map(toolbox.evaluate, invalids)
-#     for ind, fit in zip(invalids, fitnesses):
-#         ind.fitness.values = fit
-#     # eval_time = time.time() - eval_time
+    evaluate_population(pop, g)
 
-#     # Check to see if we have a new elite individual.
-#     new_elite = tools.selBest(pop, k=1)
-#     elite = tools.selBest([elite[0],new_elite[0]],k=1)
-
-#     # Add the elite individual back into the population.
-#     pop = elite+pop
-
-#     print("Generation "+str(g))
+    print("Generation "+str(g))
 #     # Log the progress of the population.
 #     writeGeneration(out_fit_file,g,pop)
 #     #history.update(pop)
-
-# writeGeneaology(geneaology_file,history.genealogy_tree)
-# # Write the hall of fame out to a file.
-# #writeHOF(out_hof_file,hof)
-
-#     # Log the timing of the run.
-#     # writeTimeInformation(out_time_file,g,select_time, id_time, cross_time, mut_time, eval_time)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  
-# # Read the responses on the receiver socket.
-# i = 
-# while i > 0:
-#     data = json.loads(receiver.recv())
-#     print(data['fitness'],data['id'])
-#     i -= 1
- 
-# print("Closing Socket")
-# socket.close()
-# receiver.close()
+print("Closing Socket")
+socket.close()
+receiver.close()
