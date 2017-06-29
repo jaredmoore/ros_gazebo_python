@@ -194,7 +194,7 @@ for p in pop:
     print(p['id'],": ",p['genome'][0],p['genome'][1],p['genome'][2],p['genome'][3])
 
     p['fitness'] = (random.random(),)
-    print(p.fitness)
+    print(p['fitness'])
 
 pop = evaluate_population(pop,0)
 
