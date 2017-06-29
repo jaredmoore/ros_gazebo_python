@@ -191,7 +191,7 @@ pop = toolbox.population(n=args.pop_size)
 
 # Can conduct evaluations this way.
 for p in pop:
-    print(p['id'],": ",p['genome'][0],p['genome'][1],p['genome'][2],['genome']p[3])
+    print(p['id'],": ",p['genome'][0],p['genome'][1],p['genome'][2],p['genome'][3])
 
     p['fitness'] = (random.random(),)
     print(p.fitness)
