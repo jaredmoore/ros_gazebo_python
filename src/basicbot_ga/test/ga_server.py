@@ -210,13 +210,13 @@ for g in range(1,args.gens):
     #hof.update(pop)
 
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
-        if random.random() < CXPB:
+        if random.random() < cxpb:
             toolbox.mate(child1, child2)
             del child1.fitness.values
             del child2.fitness.values
 
     for mutant in offspring:
-        if random.random() < MUTPB:
+        if random.random() < mutpb:
             toolbox.mutate(mutant)
             del mutant.fitness.values
 
