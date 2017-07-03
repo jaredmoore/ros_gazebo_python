@@ -64,6 +64,7 @@ print("Sending tasks to workers")
 def generate_id():
     for i in range(10000):
         yield i
+id_generator = generate_id()
 
 def format_float(value):
     """ Return a formatted float value capable of being printed. """
@@ -76,7 +77,7 @@ def init_gene():
 def init_individual(create):
     """ Initialize an individual. """
     ind = create()
-    ind.id = generate_id()
+    ind.id = next(id_generator)
     for i in range(4):
         ind.append(init_gene())
     return ind
