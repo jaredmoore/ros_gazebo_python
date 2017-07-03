@@ -62,7 +62,7 @@ _ = raw_input()
 print("Sending tasks to workers")
 
 def generate_id():
-    for i in range(1000000000):
+    for i in range(10000):
         yield i
 
 def format_float(value):
