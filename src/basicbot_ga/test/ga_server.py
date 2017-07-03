@@ -74,7 +74,7 @@ def init_individual(create):
     ind = create()
     ind.id = 0
     for i in range(4):
-        int.append(init_gene())
+        ind.append(init_gene())
     return ind
 
 def mutate_value(value,low_lim,upp_lim):
@@ -124,7 +124,7 @@ def evaluate_population(population, gen):
     while i > 0:
         data = json.loads(receiver.recv())
         print(data['fitness'],data['id'])
-        population[get_index_of_ind(population,data['id'])]['fitness'] = data['fitness']
+        population[get_index_of_ind(population,data['id'])].fitness = data['fitness']
         i -= 1
      
     # Wait for the send thread to complete.
