@@ -135,7 +135,7 @@ def evaluate_population(population, gen):
 def get_index_of_ind(population, ind_id):
     """ Get the index of the individual in the population. """
     for i,ind in enumerate(population):
-        if ind['id'] == ind_id:
+        if ind['id'] == ind.id:
             return i
 
 # Establish name of the output files and write appropriate headers.
