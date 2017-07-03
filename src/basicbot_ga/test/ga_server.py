@@ -61,6 +61,10 @@ print("Press Enter when the workers are ready: ")
 _ = raw_input()
 print("Sending tasks to workers")
 
+def generate_id():
+    for i in range(1000000000):
+        yield i
+
 def format_float(value):
     """ Return a formatted float value capable of being printed. """
     return float("{0:.4f}".format(value))
@@ -72,7 +76,7 @@ def init_gene():
 def init_individual(create):
     """ Initialize an individual. """
     ind = create()
-    ind.id = 0
+    ind.id = next(generate_id)
     for i in range(4):
         ind.append(init_gene())
     return ind
