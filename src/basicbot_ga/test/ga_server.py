@@ -69,16 +69,13 @@ def init_gene():
     """ Initialize a gene in the range of 0 to 10. """
     return format_float(random.random()*10.0)
 
-def init_individual():
+def init_individual(create):
     """ Initialize an individual. """
-    return {'id':0,'genome':[
-                init_gene(), # center_spin_thresh
-                init_gene(), # center_drive_thresh
-                init_gene(), # center_stop_thresh
-                init_gene() # stopping_thresh
-            ], 
-            'fitness':-1.0}
-
+    ind = create()
+    ind.id = 0
+    for i in range(4):
+        int.append(init_gene())
+    return ind
 
 def mutate_value(value,low_lim,upp_lim):
     """ Mutate a value by a gaussian within the bounds.  
@@ -163,7 +160,7 @@ history = tools.History()
 toolbox.register("attr_gene",init_gene)
 
 # Initialize the genome for the individual.
-toolbox.register("individual", init_individual)
+toolbox.register("individual", init_individual, creator.Individual)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
 toolbox.register("mutate", mutate)
@@ -191,10 +188,10 @@ pop = toolbox.population(n=args.pop_size)
 
 # Can conduct evaluations this way.
 for p in pop:
-    print(p['id'],": ",p['genome'][0],p['genome'][1],p['genome'][2],p['genome'][3])
+    print(p.id,": ",p[0],p[1],p[2],p[3])
 
-    p['fitness'] = (random.random(),)
-    print(p['fitness'])
+    p.fitness = (random.random(),)
+    print(p.fitness)
 
 pop = evaluate_population(pop,0)
 
