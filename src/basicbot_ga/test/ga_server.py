@@ -212,13 +212,13 @@ for g in range(1,args.gens):
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
         if random.random() < cxpb:
             toolbox.mate(child1, child2)
-            del child1.fitness
-            del child2.fitness
+            child1.fitness = -1.0
+            child2.fitness = -1.0
 
     for mutant in offspring:
         if random.random() < mutpb:
             toolbox.mutate(mutant)
-            del mutant.fitness
+            mutant.fitness = -1.0
 
     pop[:] = offspring
 
