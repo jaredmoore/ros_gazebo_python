@@ -220,7 +220,7 @@ for g in range(1,args.gens):
             toolbox.mutate(mutant)
             mutant.fitness = -1.0
 
-    pop[:] = offspring
+    pop[:] = offspring + elite
 
     # Request new id's for the population.
     for i in range(len(pop)):
