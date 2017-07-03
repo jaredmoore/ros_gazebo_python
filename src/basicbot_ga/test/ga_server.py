@@ -76,7 +76,7 @@ def init_gene():
 def init_individual(create):
     """ Initialize an individual. """
     ind = create()
-    ind.id = next(generate_id)
+    ind.id = next(generate_id())
     for i in range(4):
         ind.append(init_gene())
     return ind
