@@ -224,7 +224,7 @@ for g in range(1,args.gens):
 
     # Request new id's for the population.
     for i in range(len(pop)):
-        pop[i]['id'] += len(pop)
+        pop[i].id += len(pop)
 
     evaluate_population(pop, g)
 
