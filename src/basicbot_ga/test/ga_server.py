@@ -32,7 +32,7 @@ class senderThread(threading.Thread):
                 - Persistant throughout execution for now.
         """
         for ind in self.population:
-            ind_pkt = {'id':ind.id,'genome':ind.genome, 'fitness':-1.0}
+            ind_pkt = {'id':ind.id,'genome':ind, 'fitness':-1.0}
             msg = json.dumps(ind_pkt)
             socket.send(msg)
 
