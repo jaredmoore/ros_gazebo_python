@@ -35,7 +35,7 @@ def writeGeneration(filename,generation,individuals):
     """ Write out the fitness information for a generation. """
     with open(filename,"a") as f:
         for i,ind in enumerate(individuals):
-            f.write(str(generation)+","+str(i)+","+str(ind.id)+",")
+            f.write(str(generation)+","+str(i)+","+str(ind.id))
             f.write(","+str(ind.fitness))
             f.write(","+str(ind))
             f.write("\n")
