@@ -159,7 +159,7 @@ def evaluate_population(population, gen):
         list of population.
     """
     # Start a thread to send the data.
-    sendThread = senderThread(1, socket, population)
+    sendThread = senderThread(gen, socket, population)
     sendThread.start()
      
     # Read the responses on the receiver socket.
@@ -186,7 +186,7 @@ out_fit_file = args.output_path+str(args.run_num)+"_fitnesses.dat"
 writeHeaders(out_fit_file,additional_headers=individual_genes_str())
 
 # Create an individual.
-creator.create("Fitness", base.Fitness, weights=(-1.0,)) # Minimize time to reach cylinder
+creator.create("Fitness", base.Fitness, weights=(1.0,)) # Minimize time to reach cylinder
 creator.create("Individual", list, fitness=creator.Fitness)
 
 # Create the toolbox for setting up DEAP functionality.
