@@ -183,7 +183,7 @@ def get_index_of_ind(population, ind_id):
 
 # Establish name of the output files and write appropriate headers.
 out_fit_file = args.output_path+str(args.run_num)+"_fitnesses.dat"
-writeHeaders(out_fit_file,additional_headers=individual_genes_str)
+writeHeaders(out_fit_file,additional_headers=individual_genes_str())
 
 # Create an individual.
 creator.create("Fitness", base.Fitness, weights=(-1.0,)) # Minimize time to reach cylinder
