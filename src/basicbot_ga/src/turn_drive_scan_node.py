@@ -31,6 +31,7 @@ bot_id = 0
 
 # Keep track of time.
 current_second = 0.0
+start_time = 0.0
 final_time = 0.0
 
 # Setup the driving messages.
@@ -194,6 +195,7 @@ def simCallback(data):
     # Set the first timestep
     ws.stepPhysics(steps=1)
     current_time = current_second
+    start_time = current_time
     final_time = current_time + 100.0
 
     print("Starting an individual simulation.")
@@ -234,7 +236,7 @@ def simCallback(data):
     bot_position = []
 
     # Publish the resulting time on the topic.
-    pub.publish(current_time)
+    pub.publish(current_time-start_time)
 
     resetWorld()
     #resetSimulation()
