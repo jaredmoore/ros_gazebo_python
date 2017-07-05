@@ -176,9 +176,7 @@ def get_index_of_ind(population, ind_id):
 
 # Establish name of the output files and write appropriate headers.
 out_fit_file = args.output_path+str(args.run_num)+"_fitnesses.dat"
-out_time_file = args.output_path+str(args.run_num)+"_timing.dat"
-geneaology_file = args.output_path+str(args.run_num)+"_geneaology.dat"
-writeHeaders(out_fit_file)
+writeHeaders(out_fit_file,additional_headers="Gene_1,Gene_2,Gene_3,Gene_4")
 
 # Create an individual.
 creator.create("Fitness", base.Fitness, weights=(-1.0,)) # Minimize time to reach cylinder
