@@ -101,17 +101,24 @@ def format_float(value):
     """ Return a formatted float value capable of being printed. """
     return float("{0:.4f}".format(value))
 
-def init_gene():
+def init_gene(val_range=10.0):
     """ Initialize a gene in the range of 0 to 10. """
-    return format_float(random.random()*10.0)
+    return format_float(random.random()*val_range)
 
 def init_individual(create):
     """ Initialize an individual. """
     ind = create()
     ind.id = next(id_generator)
-    for i in range(4):
-        ind.append(init_gene())
+    
+    ind.append(init_gene(10.0))     # center_spin_thresh 
+    ind.append(9.0+init_gene(1.0))  # center_drive_thresh
+    ind.append(init_gene(10.0))     # center_stop_thresh
+    ind.append(init_gene(10.0))     # stopping_thresh
+
     return ind
+
+def individual_genes_str():
+    return "center_spin_thresh,center_drive_thresh,center_stop_thresh,stopping_thresh"
 
 def mutate_value(value,low_lim,upp_lim):
     """ Mutate a value by a gaussian within the bounds.  
@@ -176,7 +183,7 @@ def get_index_of_ind(population, ind_id):
 
 # Establish name of the output files and write appropriate headers.
 out_fit_file = args.output_path+str(args.run_num)+"_fitnesses.dat"
-writeHeaders(out_fit_file,additional_headers="Gene_1,Gene_2,Gene_3,Gene_4")
+writeHeaders(out_fit_file,additional_headers=individual_genes_str)
 
 # Create an individual.
 creator.create("Fitness", base.Fitness, weights=(-1.0,)) # Minimize time to reach cylinder
