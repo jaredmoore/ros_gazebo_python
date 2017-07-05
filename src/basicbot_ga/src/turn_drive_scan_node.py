@@ -181,7 +181,7 @@ def simCallback(data):
     global final_time, pub, bot_position, bot_id
 
     genome_data = rospy.get_param('basicbot_genome')
-    print("                 Got genome data of:"+str(genome_data))
+    # print("                 Got genome data of:"+str(genome_data))
 
     genome = {
         'center_spin_thresh': genome_data[0],
@@ -198,7 +198,7 @@ def simCallback(data):
     start_time = current_time
     final_time = current_time + 100.0
 
-    print("Starting an individual simulation.")
+    # print("Starting an individual simulation.")
 
     with sm:
             smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
@@ -221,14 +221,14 @@ def simCallback(data):
             outcome = sm.execute()
 
     current_time = current_second 
-    print("Current Time: "+str(current_time))
+    print("Current Time: "+str(current_time-start_time))
 
-    if outcome == 'succeeded':
-        print("Ending a simulation:")
-        print(scan.getLeftCenterRightScanState())
-        print("--------------------------")
-    else:
-        print("Robot failed to find the cylinder in time.")
+    # if outcome == 'succeeded':
+    #     print("Ending a simulation:")
+    #     print(scan.getLeftCenterRightScanState())
+    #     print("--------------------------")
+    # else:
+    #     print("Robot failed to find the cylinder in time.")
 
     # Log the basicbot position information.
     log_bot_position(bot_id)
