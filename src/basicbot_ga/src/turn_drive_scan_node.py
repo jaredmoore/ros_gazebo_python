@@ -18,16 +18,20 @@ from std_srvs.srv import Empty
 from geometry_msgs.msg import Twist
 from gazebo_msgs.srv import GetWorldProperties
 
+from rosgraph_msgs.msg import Clock
+
 from basicbot_utils import GetLaserScanner, GetLinkStates
 from world_step import WorldStep
 
 ###########################
 
-final_time = 0.0
-
 # For tracking robot progression.
 bot_position = []
 bot_id = 0
+
+# Keep track of time.
+current_second = 0.0
+final_time = 0.0
 
 # Setup the driving messages.
 twist = {}
@@ -52,7 +56,7 @@ def MoveRobot(movement):
 def checkAtFinalTime():
     """ Check to see if we have exceeded the execution time. """
     global final_time
-    if final_time <= getWorldProp().sim_time:
+    if final_time <= current_second:
         return True
     return False
 
@@ -75,7 +79,7 @@ def update_world(mv_command):
     scan_data = scan.getLeftCenterRightScanState()
 
     # Update Link States for tracking purposes.
-    #bot_position.append([getWorldProp().sim_time,ls.getLinkPose('basicbot::base_link').position.x,ls.getLinkPose('basicbot::base_link').position.y])
+    #bot_position.append([current_second,ls.getLinkPose('basicbot::base_link').position.x,ls.getLinkPose('basicbot::base_link').position.y])
 
     return scan_data
 
@@ -162,6 +166,15 @@ class Stop(smach.State):
 
 ###########################
 
+def clock_callback(data):
+    """ Subscriber to /clock
+
+    This callback is responsible for getting the current simulation
+    time in seconds.
+    """
+    global current_second
+    current_second = data.clock.secs
+
 def simCallback(data):
     """ Callback to conduct a simulation. """
     global final_time, pub, bot_position, bot_id
@@ -180,8 +193,8 @@ def simCallback(data):
 
     # Set the first timestep
     ws.stepPhysics(steps=1)
-    current_time = getWorldProp().sim_time 
-    final_time = getWorldProp().sim_time + 100.0
+    current_time = current_second
+    final_time = current_time + 100.0
 
     print("Starting an individual simulation.")
 
@@ -205,7 +218,7 @@ def simCallback(data):
 
             outcome = sm.execute()
 
-    current_time = getWorldProp().sim_time 
+    current_time = current_second 
     print("Current Time: "+str(current_time))
 
     if outcome == 'succeeded':
@@ -239,7 +252,7 @@ rospy.wait_for_service(ns+'/gazebo/reset_simulation')
 rospy.wait_for_service(ns+'/gazebo/pause_physics')
 rospy.wait_for_service(ns+'/gazebo/unpause_physics')
 
-getWorldProp = rospy.ServiceProxy(ns+'/gazebo/get_world_properties', GetWorldProperties)
+#getWorldProp = rospy.ServiceProxy(ns+'/gazebo/get_world_properties', GetWorldProperties)
 resetWorld = rospy.ServiceProxy(ns+'/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy(ns+'/gazebo/reset_simulation', Empty)
 
@@ -259,6 +272,7 @@ scan = GetLaserScanner()
 # Setup the callbacks for starting and reporting results.
 sub = rospy.Subscriber('simulation_start', std_msgs.msg.Empty, simCallback)
 pub = rospy.Publisher('simulation_result', std_msgs.msg.Float64, queue_size=1)
+clk = rospy.Subscriber('clock', Clock, clock_callback)
 
 # Spin the node and wait for the callback.
 rospy.spin()
