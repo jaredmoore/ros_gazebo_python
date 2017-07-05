@@ -41,7 +41,7 @@
 
 <!-- <group ns="basicbot_ga_1"> -->
 <group ns="ga1">
-  <!--<remap from="/clock" to="/ga1_clock"/>-->
+  <remap from="/clock" to="/ga1/clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -70,7 +70,7 @@
 </group>
 
 <group ns="ga2">
-  <!--<remap from="/clock" to="/ga2_clock"/>-->
+  <remap from="/clock" to="/ga2/clock"/>
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11346"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
