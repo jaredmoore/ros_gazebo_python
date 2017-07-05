@@ -62,7 +62,7 @@
 
 	<!-- Load the turn_drive_scan node -->
 	<node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
-   <remap from="clock" to="ga1_clock"/> 
+   <remap from="/clock" to="/ga1_clock"/>
   </node>
 
 	<!-- Load the step world node -->
@@ -91,7 +91,9 @@
   <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
 
   <!-- Load the turn_drive_scan node -->
-  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
+  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
+    <remap from="/clock" to="/ga2_clock"/>
+  </node>
 
   <!-- Load the step world node -->
   <node name="step_world" pkg="world_step" type="step_world_server"/>
@@ -119,7 +121,9 @@
   <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
 
   <!-- Load the turn_drive_scan node -->
-  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
+  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
+    <remap from="/clock" to="/ga3_clock"/>
+  </node>
 
   <!-- Load the step world node -->
   <node name="step_world" pkg="world_step" type="step_world_server"/>
@@ -147,7 +151,9 @@
   <node name="basicbot_transporter" pkg="basicbot_ga" type="basicbot_transporter.py" output="screen"></node>
 
   <!-- Load the turn_drive_scan node -->
-  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
+  <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
+    <remap from="/clock" to="/ga4_clock"/>
+  </node>
 
   <!-- Load the step world node -->
   <node name="step_world" pkg="world_step" type="step_world_server"/>
