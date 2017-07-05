@@ -36,7 +36,7 @@ def writeGeneration(filename,generation,individuals):
     with open(filename,"a") as f:
         for i,ind in enumerate(individuals):
             f.write(str(generation)+","+str(i)+","+str(ind.id))
-            f.write(","+str(ind.fitness))
+            f.write(","+str(ind.fitness)+",")
             f.write(",".join(str(i) for i in ind))
             f.write("\n")
 
