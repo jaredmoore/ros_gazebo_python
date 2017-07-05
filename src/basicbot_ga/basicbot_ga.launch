@@ -41,7 +41,7 @@
 
 <!-- <group ns="basicbot_ga_1"> -->
 <group ns="ga1">
-  <remap from="/clock" to="/ga1_clock"/>
+  <!--<remap from="/clock" to="/ga1_clock"/>-->
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11345"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -62,7 +62,6 @@
 
 	<!-- Load the turn_drive_scan node -->
 	<node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
-   <remap from="/clock" to="/ga1_clock"/>
   </node>
 
 	<!-- Load the step world node -->
@@ -71,7 +70,7 @@
 </group>
 
 <group ns="ga2">
-  <remap from="/clock" to="/ga2_clock"/>
+  <!--<remap from="/clock" to="/ga2_clock"/>-->
   <!-- start gazebo server-->
   <env name="GAZEBO_MASTER_URI" value="http://localhost:11346"/>
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" 
@@ -92,7 +91,6 @@
 
   <!-- Load the turn_drive_scan node -->
   <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen">
-    <remap from="/clock" to="/ga2_clock"/>
   </node>
 
   <!-- Load the step world node -->

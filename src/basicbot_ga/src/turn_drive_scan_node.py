@@ -272,7 +272,7 @@ scan = GetLaserScanner()
 # Setup the callbacks for starting and reporting results.
 sub = rospy.Subscriber('simulation_start', std_msgs.msg.Empty, simCallback)
 pub = rospy.Publisher('simulation_result', std_msgs.msg.Float64, queue_size=1)
-clk = rospy.Subscriber('clock', Clock, clock_callback)
+clk = rospy.Subscriber(ns+'/clock', Clock, clock_callback)
 
 # Spin the node and wait for the callback.
 rospy.spin()
