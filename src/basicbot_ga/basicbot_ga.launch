@@ -65,7 +65,7 @@
   </node>
 
 	<!-- Load the step world node -->
-  <node name="step_world" pkg="world_step" type="step_world_server"><remap from="clock" to="ga1_clock"/></node>
+  <node name="step_world" pkg="world_step" type="step_world_server"></node>
 
 </group>
 
