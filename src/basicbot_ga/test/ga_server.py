@@ -12,6 +12,37 @@ from deap import base
 from deap import creator
 from deap import tools
 
+############################################################################
+############################################################################
+############################################################################
+
+# Writing output files, pull out into its own class later?
+def writeHeaders(filename,additional_headers=""):
+    """ Write out the headers for a logging file. 
+    
+    Args:
+        filename: Where to write the file and what to call it.
+        additional_headers: any additional information to log.  Typically a comma-separated string of genes.
+
+    """
+    with open(filename,"w") as f:
+        f.write("Gen,Ind,Ind_ID,Fit_1")
+        if additional_headers:
+            f.write(","+additional_headers)
+        f.write("\n")
+
+def writeGeneration(filename,generation,individuals):
+    """ Write out the fitness information for a generation. """
+    with open(filename,"a") as f:
+        for i,ind in enumerate(individuals):
+            f.write(str(generation)+","+str(i)+","+str(ind.ind_id)+",")
+            f.write(",".join(str(f) for f in ind.fitness))
+            f.write(","+str(ind))
+            f.write("\n")
+
+############################################################################
+############################################################################
+############################################################################
 class senderThread(threading.Thread):
     def __init__(self, threadID, socket, population):
         threading.Thread.__init__(self)
@@ -147,7 +178,7 @@ def get_index_of_ind(population, ind_id):
 out_fit_file = args.output_path+str(args.run_num)+"_fitnesses.dat"
 out_time_file = args.output_path+str(args.run_num)+"_timing.dat"
 geneaology_file = args.output_path+str(args.run_num)+"_geneaology.dat"
-#writeHeaders(out_fit_file)
+writeHeaders(out_fit_file)
 
 # Create an individual.
 creator.create("Fitness", base.Fitness, weights=(-1.0,)) # Minimize time to reach cylinder
@@ -181,15 +212,12 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 # Register the selection function.
 toolbox.register("select", tools.selTournament, tournsize=2)
 
-# Create the Hall-of-Fame
-#hof = tools.HallOfFame(maxsize=100)
-
 # Crossover and mutation probability
 cxpb, mutpb = 0.5, 0.05
 
 # Setup the population.
 pop = toolbox.population(n=args.pop_size)
-# history.update(pop)
+history.update(pop)
 
 # Can conduct evaluations this way.
 for p in pop:
@@ -200,8 +228,8 @@ for p in pop:
 
 pop = evaluate_population(pop,0)
 
-# # Log the progress of the population. (For Generation 0)
-# writeGeneration(out_fit_file,0,pop)
+# Log the progress of the population. (For Generation 0)
+writeGeneration(out_fit_file,0,pop)
 
 for g in range(1,args.gens):
 
@@ -210,9 +238,6 @@ for g in range(1,args.gens):
 
     offspring = toolbox.select(pop, k=len(pop)-1)
     offspring = list(map(toolbox.clone, offspring))
-
-    # Update the Hall of Fame
-    #hof.update(pop)
 
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
         if random.random() < cxpb:
@@ -234,9 +259,11 @@ for g in range(1,args.gens):
     evaluate_population(pop, g)
 
     print("Generation "+str(g))
-#     # Log the progress of the population.
-#     writeGeneration(out_fit_file,g,pop)
-#     #history.update(pop)
+    
+    # Log the progress of the population.
+    writeGeneration(out_fit_file,g,pop)
+    
+    history.update(pop)
  
 print("Closing Socket")
 socket.close()
