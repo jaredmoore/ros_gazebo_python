@@ -21,7 +21,7 @@ from gazebo_msgs.srv import GetWorldProperties
 from rosgraph_msgs.msg import Clock
 
 from basicbot_utils import GetLaserScanner, GetLinkStates
-from world_step import WorldStep
+# from world_step import WorldStep
 
 ###########################
 
@@ -74,7 +74,7 @@ def update_world(mv_command):
     global bot_position
 
     MoveRobot(mv_command)
-    ws.stepPhysics(steps=1)
+    # ws.stepPhysics(steps=1)
     if checkAtFinalTime():
         return None
     scan_data = scan.getLeftCenterRightScanState()
@@ -193,7 +193,7 @@ def simCallback(data):
     sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
     # Set the first timestep
-    ws.stepPhysics(steps=1)
+    # ws.stepPhysics(steps=1)
     current_time = current_second
     start_time = current_time
     final_time = current_time + 100.0
@@ -259,7 +259,7 @@ resetWorld = rospy.ServiceProxy(ns+'/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy(ns+'/gazebo/reset_simulation', Empty)
 
 # Setup the WorldStep service object
-ws = WorldStep()
+# ws = WorldStep()
 
 # Setup the messages publisher we will use to drive the robot.
 cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)

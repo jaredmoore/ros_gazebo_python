@@ -65,7 +65,7 @@
   </node>
 
 	<!-- Load the step world node -->
-  <node name="step_world" pkg="world_step" type="step_world_server"></node>
+  <!-- <node name="step_world" pkg="world_step" type="step_world_server"></node> -->
 
 </group>
 
@@ -94,7 +94,7 @@
   </node>
 
   <!-- Load the step world node -->
-  <node name="step_world" pkg="world_step" type="step_world_server"/>
+  <!-- <node name="step_world" pkg="world_step" type="step_world_server"/> -->
 
 </group>
 
@@ -122,7 +122,7 @@
   <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
 
   <!-- Load the step world node -->
-  <node name="step_world" pkg="world_step" type="step_world_server"/>
+  <!-- <node name="step_world" pkg="world_step" type="step_world_server"/> -->
 
 </group>
 
@@ -150,7 +150,7 @@
   <node name="turn_drive_scan" pkg="basicbot_ga" type="turn_drive_scan_node.py" output="screen"></node>
 
   <!-- Load the step world node -->
-  <node name="step_world" pkg="world_step" type="step_world_server"/>
+  <!-- <node name="step_world" pkg="world_step" type="step_world_server"/> -->
 
 </group>
 
