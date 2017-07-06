@@ -199,6 +199,7 @@ def simCallback(data):
     final_time = current_time + 100.0
 
     # print("Starting an individual simulation.")
+    unpause_physics()
 
     with sm:
             smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
@@ -239,6 +240,7 @@ def simCallback(data):
     pub.publish(current_time-start_time)
 
     resetWorld()
+    pause_physics()
     #resetSimulation()
 
 ###########################
@@ -257,6 +259,9 @@ rospy.wait_for_service(ns+'/gazebo/unpause_physics')
 #getWorldProp = rospy.ServiceProxy(ns+'/gazebo/get_world_properties', GetWorldProperties)
 resetWorld = rospy.ServiceProxy(ns+'/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy(ns+'/gazebo/reset_simulation', Empty)
+
+pause_physics = rospy.ServiceProxy(ns+'/gazebo/pause_physics',Empty)
+unpause_physics = rospy.ServiceProxy(ns+'/gazebo/unpause_physics',Empty)
 
 # Setup the WorldStep service object
 # ws = WorldStep()
