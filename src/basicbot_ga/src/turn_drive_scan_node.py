@@ -9,6 +9,8 @@
         smach: sudo apt-get install ros-indigo-executive-smach
 """
 
+import time
+
 import random
 import rospy
 import std_msgs.msg
@@ -193,6 +195,9 @@ def simCallback(data):
 
     # Start running physics now that everything is setup.
     unpause_physics()
+
+    # Sleep for three seconds allowing the sensors to come online.
+    time.sleep(3)
 
     with sm:
             smach.StateMachine.add('SPIN_RIGHT', SpinRight(genome['center_drive_thresh']), transitions={ 'spin_right':'SPIN_RIGHT',
