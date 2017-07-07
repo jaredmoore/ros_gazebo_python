@@ -155,10 +155,11 @@ class Stop(smach.State):
         self.stop_thresh = stop_thresh
 
     def execute(self, userdata):
+        global current_second, start_time
         scan_data = update_world('stop')
         if not scan_data:
             return 'failed'
-        if scan_data['center'] < self.stop_thresh:
+        if scan_data['center'] < self.stop_thresh and current_second-start_time > 5.0:
             return 'succeeded'
         else:
             return 'spin_right'
