@@ -21,7 +21,6 @@ from gazebo_msgs.srv import GetWorldProperties
 from rosgraph_msgs.msg import Clock
 
 from basicbot_utils import GetLaserScanner, GetLinkStates
-# from world_step import WorldStep
 
 ###########################
 
@@ -78,9 +77,6 @@ def update_world(mv_command):
     if checkAtFinalTime():
         return None
     scan_data = scan.getLeftCenterRightScanState()
-
-    # Update Link States for tracking purposes.
-    #bot_position.append([current_second,ls.getLinkPose('basicbot::base_link').position.x,ls.getLinkPose('basicbot::base_link').position.y])
 
     return scan_data
 
@@ -178,10 +174,9 @@ def clock_callback(data):
 
 def simCallback(data):
     """ Callback to conduct a simulation. """
-    global final_time, pub, bot_position, bot_id
+    global start_time, final_time, pub, bot_position, bot_id
 
     genome_data = rospy.get_param('basicbot_genome')
-    # print("                 Got genome data of:"+str(genome_data))
 
     genome = {
         'center_spin_thresh': genome_data[0],
@@ -192,13 +187,11 @@ def simCallback(data):
 
     sm = smach.StateMachine(outcomes=['succeeded','failed'])
 
-    # Set the first timestep
-    # ws.stepPhysics(steps=1)
     current_time = current_second
     start_time = current_time
     final_time = current_time + 100.0
 
-    # print("Starting an individual simulation.")
+    # Start running physics now that everything is setup.
     unpause_physics()
 
     with sm:
@@ -224,13 +217,6 @@ def simCallback(data):
     current_time = current_second 
     print("Current Time: "+str(current_time-start_time))
 
-    # if outcome == 'succeeded':
-    #     print("Ending a simulation:")
-    #     print(scan.getLeftCenterRightScanState())
-    #     print("--------------------------")
-    # else:
-    #     print("Robot failed to find the cylinder in time.")
-
     # Log the basicbot position information.
     log_bot_position(bot_id)
     bot_id += 1
@@ -240,8 +226,9 @@ def simCallback(data):
     pub.publish(current_time-start_time)
 
     resetWorld()
+
+    # Pause updates until we receive a new genome.
     pause_physics()
-    #resetSimulation()
 
 ###########################
 
@@ -256,15 +243,11 @@ rospy.wait_for_service(ns+'/gazebo/reset_simulation')
 rospy.wait_for_service(ns+'/gazebo/pause_physics')
 rospy.wait_for_service(ns+'/gazebo/unpause_physics')
 
-#getWorldProp = rospy.ServiceProxy(ns+'/gazebo/get_world_properties', GetWorldProperties)
 resetWorld = rospy.ServiceProxy(ns+'/gazebo/reset_world', Empty)
 resetSimulation = rospy.ServiceProxy(ns+'/gazebo/reset_simulation', Empty)
 
 pause_physics = rospy.ServiceProxy(ns+'/gazebo/pause_physics',Empty)
 unpause_physics = rospy.ServiceProxy(ns+'/gazebo/unpause_physics',Empty)
-
-# Setup the WorldStep service object
-# ws = WorldStep()
 
 # Setup the messages publisher we will use to drive the robot.
 cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
