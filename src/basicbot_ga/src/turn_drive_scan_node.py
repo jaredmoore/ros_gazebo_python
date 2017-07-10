@@ -72,7 +72,7 @@ def update_world(mv_command):
         Returns:
             scan_data: if None, failed state
     """
-    global bot_position
+    global bot_position, scan
 
     MoveRobot(mv_command)
     # ws.stepPhysics(steps=1)
@@ -177,7 +177,7 @@ def clock_callback(data):
 
 def simCallback(data):
     """ Callback to conduct a simulation. """
-    global start_time, final_time, pub, bot_position, bot_id
+    global start_time, final_time, pub, bot_position, bot_id, scan
 
     genome_data = rospy.get_param('basicbot_genome')
 
@@ -228,8 +228,10 @@ def simCallback(data):
     bot_id += 1
     bot_position = []
 
-    # Publish the resulting time on the topic.
-    pub.publish(current_time-start_time)
+    # Publish the fitness on the topic.
+    time_objective = current_time-start_time
+    dist_objective = scan.getLeftCenterRightScanState()['center']
+    pub.publish(time_objective*dist_objective)
 
     resetWorld()
 
